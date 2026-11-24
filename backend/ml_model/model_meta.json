@@ -1,0 +1,40 @@
+{
+  "model_type": "RandomForestRegressor",
+  "algorithm": "scikit-learn",
+  "training_source": "flood_risk_dataset_india.csv",
+  "total_dataset_rows": 10000,
+  "training_samples": 8000,
+  "test_samples": 2000,
+  "features": [
+    "rainfall",
+    "rainfall_intensity",
+    "soil_moisture",
+    "river_level",
+    "elevation",
+    "slope",
+    "soil_saturation_ratio",
+    "effective_precipitation_index",
+    "runoff_potential_factor",
+    "river_danger_ratio",
+    "terrain_funnel_factor"
+  ],
+  "metrics": {
+    "r2_score": 0.9424,
+    "mae": 3.47,
+    "rmse": 4.44
+  },
+  "feature_importances": {
+    "runoff_potential_factor": 57.79,
+    "rainfall_intensity": 15.02,
+    "river_level": 10.56,
+    "river_danger_ratio": 9.79,
+    "soil_saturation_ratio": 2.09,
+    "soil_moisture": 1.99,
+    "rainfall": 0.71,
+    "effective_precipitation_index": 0.65,
+    "slope": 0.56,
+    "elevation": 0.46,
+    "terrain_funnel_factor": 0.38
+  },
+  "status": "Production-Ready Trained Model"
+}

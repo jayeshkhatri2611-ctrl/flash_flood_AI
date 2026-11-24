@@ -1,0 +1,849 @@
+[
+  {
+    "id": "chamoli",
+    "name": "Chamoli",
+    "state": "Uttarakhand",
+    "lat": 30.4226,
+    "lng": 79.3243,
+    "river_basin": "Upper Alaknanda Basin",
+    "authority": "Chamoli District Disaster Management Authority (DDMA)",
+    "environmental_data": {
+      "rainfall": 88.0,
+      "rainfall_intensity": 36.4,
+      "soil_moisture": 68.0,
+      "river_level": 2.9,
+      "danger_level": 4.5,
+      "elevation": 1650.0,
+      "slope": 30.0,
+      "catchment_area_sqkm": 3520
+    },
+    "risk_assessment": {
+      "risk_score": 51.8,
+      "risk_level": "MODERATE",
+      "trend": "rising",
+      "contributing_factors": [
+        "Heavy rainfall (88.0 mm) saturating upper catchments",
+        "High antecedent soil moisture (68.0%)"
+      ],
+      "recommended_action": "\ud83d\udfe1 ALERT (YELLOW): Heighten monitoring of upstream telemetry gauges. Clear stormwater culverts. Issue public warnings against visiting riverbanks and scenic gorge trails.",
+      "last_updated": "2026-09-08 10:54:27 IST"
+    },
+    "historical_24h": [
+      {
+        "hour": "00:00",
+        "rainfall_mm": 12.0,
+        "river_level_m": 2.1,
+        "soil_moisture_pct": 52,
+        "risk_score": 28.5
+      },
+      {
+        "hour": "02:00",
+        "rainfall_mm": 18.5,
+        "river_level_m": 2.3,
+        "soil_moisture_pct": 56,
+        "risk_score": 32.1
+      },
+      {
+        "hour": "04:00",
+        "rainfall_mm": 24.0,
+        "river_level_m": 2.5,
+        "soil_moisture_pct": 61,
+        "risk_score": 37.8
+      },
+      {
+        "hour": "06:00",
+        "rainfall_mm": 35.2,
+        "river_level_m": 2.8,
+        "soil_moisture_pct": 68,
+        "risk_score": 46.2
+      },
+      {
+        "hour": "08:00",
+        "rainfall_mm": 52.0,
+        "river_level_m": 3.2,
+        "soil_moisture_pct": 74,
+        "risk_score": 58.0
+      },
+      {
+        "hour": "10:00",
+        "rainfall_mm": 74.5,
+        "river_level_m": 3.7,
+        "soil_moisture_pct": 79,
+        "risk_score": 69.4
+      },
+      {
+        "hour": "12:00",
+        "rainfall_mm": 96.0,
+        "river_level_m": 4.1,
+        "soil_moisture_pct": 83,
+        "risk_score": 79.1
+      },
+      {
+        "hour": "14:00",
+        "rainfall_mm": 114.0,
+        "river_level_m": 4.4,
+        "soil_moisture_pct": 86,
+        "risk_score": 84.6
+      },
+      {
+        "hour": "16:00",
+        "rainfall_mm": 124.0,
+        "river_level_m": 4.55,
+        "soil_moisture_pct": 87.5,
+        "risk_score": 87.2
+      },
+      {
+        "hour": "Now",
+        "rainfall_mm": 128.5,
+        "river_level_m": 4.65,
+        "soil_moisture_pct": 88.2,
+        "risk_score": 88.4
+      }
+    ]
+  },
+  {
+    "id": "uttarkashi",
+    "name": "Uttarkashi",
+    "state": "Uttarakhand",
+    "lat": 30.7268,
+    "lng": 78.4354,
+    "river_basin": "Upper Bhagirathi Basin",
+    "authority": "Uttarkashi DDMA",
+    "environmental_data": {
+      "rainfall": 94.0,
+      "rainfall_intensity": 26.0,
+      "soil_moisture": 79.5,
+      "river_level": 3.85,
+      "danger_level": 4.2,
+      "elevation": 1850.0,
+      "slope": 34.0,
+      "catchment_area_sqkm": 4120
+    },
+    "risk_assessment": {
+      "risk_score": 69.8,
+      "risk_level": "HIGH",
+      "trend": "rising",
+      "contributing_factors": [
+        "Heavy rainfall (94.0 mm) saturating upper catchments",
+        "High antecedent soil moisture (79.5%)",
+        "River level at 3.85m encroaching danger threshold"
+      ],
+      "recommended_action": "\u26a0\ufe0f WARNING (ORANGE): Prepare low-lying settlements for imminent evacuation. Halt traffic on vulnerable bridges and mountain highways. Position earth-moving equipment at critical landslide bottlenecks.",
+      "last_updated": "2026-09-08 11:03:28 IST"
+    },
+    "historical_24h": [
+      {
+        "hour": "00:00",
+        "rainfall_mm": 8.0,
+        "river_level_m": 1.9,
+        "soil_moisture_pct": 48,
+        "risk_score": 22.0
+      },
+      {
+        "hour": "04:00",
+        "rainfall_mm": 16.0,
+        "river_level_m": 2.2,
+        "soil_moisture_pct": 54,
+        "risk_score": 30.5
+      },
+      {
+        "hour": "08:00",
+        "rainfall_mm": 38.0,
+        "river_level_m": 2.7,
+        "soil_moisture_pct": 63,
+        "risk_score": 44.0
+      },
+      {
+        "hour": "12:00",
+        "rainfall_mm": 65.0,
+        "river_level_m": 3.2,
+        "soil_moisture_pct": 72,
+        "risk_score": 60.1
+      },
+      {
+        "hour": "16:00",
+        "rainfall_mm": 88.0,
+        "river_level_m": 3.7,
+        "soil_moisture_pct": 78,
+        "risk_score": 71.5
+      },
+      {
+        "hour": "Now",
+        "rainfall_mm": 94.0,
+        "river_level_m": 3.85,
+        "soil_moisture_pct": 79.5,
+        "risk_score": 74.2
+      }
+    ]
+  },
+  {
+    "id": "kullu",
+    "name": "Kullu",
+    "state": "Himachal Pradesh",
+    "lat": 31.9579,
+    "lng": 77.1095,
+    "river_basin": "Beas River Basin",
+    "authority": "Kullu District Emergency Operation Centre (DEOC)",
+    "environmental_data": {
+      "rainfall": 86.2,
+      "rainfall_intensity": 22.5,
+      "soil_moisture": 76.0,
+      "river_level": 3.75,
+      "danger_level": 4.0,
+      "elevation": 1279,
+      "slope": 31.2,
+      "catchment_area_sqkm": 2850
+    },
+    "risk_assessment": {
+      "risk_score": 71.8,
+      "risk_level": "HIGH",
+      "trend": "rising",
+      "contributing_factors": [
+        "Continuous precipitation in upper Beas and Parbati catchments",
+        "Soil moisture near field capacity (76%)",
+        "Beas river stage rapidly approaching warning level (3.75m / 4.00m)"
+      ],
+      "recommended_action": "\u26a0\ufe0f ORANGE ALERT: Suspend river rafting and paragliding activities. Monitor Manali-Kullu bypass for potential scouring and debris flow.",
+      "last_updated": "2026-09-06T17:15:00+05:30"
+    },
+    "historical_24h": [
+      {
+        "hour": "00:00",
+        "rainfall_mm": 5.0,
+        "river_level_m": 1.8,
+        "soil_moisture_pct": 42,
+        "risk_score": 18.5
+      },
+      {
+        "hour": "04:00",
+        "rainfall_mm": 14.0,
+        "river_level_m": 2.1,
+        "soil_moisture_pct": 51,
+        "risk_score": 28.0
+      },
+      {
+        "hour": "08:00",
+        "rainfall_mm": 32.0,
+        "river_level_m": 2.6,
+        "soil_moisture_pct": 60,
+        "risk_score": 41.5
+      },
+      {
+        "hour": "12:00",
+        "rainfall_mm": 58.0,
+        "river_level_m": 3.1,
+        "soil_moisture_pct": 69,
+        "risk_score": 57.0
+      },
+      {
+        "hour": "16:00",
+        "rainfall_mm": 79.0,
+        "river_level_m": 3.55,
+        "soil_moisture_pct": 74,
+        "risk_score": 68.0
+      },
+      {
+        "hour": "Now",
+        "rainfall_mm": 86.2,
+        "river_level_m": 3.75,
+        "soil_moisture_pct": 76.0,
+        "risk_score": 71.8
+      }
+    ]
+  },
+  {
+    "id": "shimla",
+    "name": "Shimla",
+    "state": "Himachal Pradesh",
+    "lat": 31.1048,
+    "lng": 77.1734,
+    "river_basin": "Sutlej Sub-catchment",
+    "authority": "Shimla DDMA",
+    "environmental_data": {
+      "rainfall": 52.0,
+      "rainfall_intensity": 14.0,
+      "soil_moisture": 62.0,
+      "river_level": 2.4,
+      "danger_level": 3.8,
+      "elevation": 2206,
+      "slope": 29.5,
+      "catchment_area_sqkm": 1940
+    },
+    "risk_assessment": {
+      "risk_score": 48.5,
+      "risk_level": "MODERATE",
+      "trend": "stable",
+      "contributing_factors": [
+        "Moderate spells of orographic rainfall",
+        "Moderate soil moisture saturation (62%)",
+        "River and nullahs flowing below warning marks"
+      ],
+      "recommended_action": "\ud83d\udfe1 YELLOW WATCH: Keep storm drains clear of silt and debris. Monitor fragile hillside slopes along NH-5.",
+      "last_updated": "2026-09-06T17:10:00+05:30"
+    },
+    "historical_24h": [
+      {
+        "hour": "00:00",
+        "rainfall_mm": 4.0,
+        "river_level_m": 1.4,
+        "soil_moisture_pct": 39,
+        "risk_score": 15.0
+      },
+      {
+        "hour": "04:00",
+        "rainfall_mm": 11.0,
+        "river_level_m": 1.6,
+        "soil_moisture_pct": 45,
+        "risk_score": 23.0
+      },
+      {
+        "hour": "08:00",
+        "rainfall_mm": 25.0,
+        "river_level_m": 1.9,
+        "soil_moisture_pct": 52,
+        "risk_score": 33.5
+      },
+      {
+        "hour": "12:00",
+        "rainfall_mm": 41.0,
+        "river_level_m": 2.2,
+        "soil_moisture_pct": 59,
+        "risk_score": 44.0
+      },
+      {
+        "hour": "16:00",
+        "rainfall_mm": 49.0,
+        "river_level_m": 2.35,
+        "soil_moisture_pct": 61,
+        "risk_score": 47.2
+      },
+      {
+        "hour": "Now",
+        "rainfall_mm": 52.0,
+        "river_level_m": 2.4,
+        "soil_moisture_pct": 62.0,
+        "risk_score": 48.5
+      }
+    ]
+  },
+  {
+    "id": "kangra",
+    "name": "Dharamshala / Kangra",
+    "state": "Himachal Pradesh",
+    "lat": 32.219,
+    "lng": 76.3234,
+    "river_basin": "Beas / Gaj Khad Sub-basin",
+    "authority": "Kangra District Disaster Cell",
+    "environmental_data": {
+      "rainfall": 64.5,
+      "rainfall_intensity": 18.0,
+      "soil_moisture": 67.5,
+      "river_level": 2.85,
+      "danger_level": 4.0,
+      "elevation": 1457,
+      "slope": 33.0,
+      "catchment_area_sqkm": 2100
+    },
+    "risk_assessment": {
+      "risk_score": 56.4,
+      "risk_level": "MODERATE",
+      "trend": "rising",
+      "contributing_factors": [
+        "Heavy cloud buildup over Dhauladhar mountain face",
+        "Steep headwater ravines (33\u00b0)",
+        "Gaj Khad stream experiencing surging flow"
+      ],
+      "recommended_action": "\ud83d\udfe1 YELLOW WATCH: Prohibit tourist congregation near Bhagsu waterfall and mountain streams.",
+      "last_updated": "2026-09-06T17:05:00+05:30"
+    },
+    "historical_24h": [
+      {
+        "hour": "00:00",
+        "rainfall_mm": 6.0,
+        "river_level_m": 1.5,
+        "soil_moisture_pct": 43,
+        "risk_score": 19.0
+      },
+      {
+        "hour": "04:00",
+        "rainfall_mm": 15.0,
+        "river_level_m": 1.8,
+        "soil_moisture_pct": 49,
+        "risk_score": 27.5
+      },
+      {
+        "hour": "08:00",
+        "rainfall_mm": 31.0,
+        "river_level_m": 2.2,
+        "soil_moisture_pct": 57,
+        "risk_score": 38.0
+      },
+      {
+        "hour": "12:00",
+        "rainfall_mm": 48.0,
+        "river_level_m": 2.5,
+        "soil_moisture_pct": 63,
+        "risk_score": 48.0
+      },
+      {
+        "hour": "16:00",
+        "rainfall_mm": 59.0,
+        "river_level_m": 2.75,
+        "soil_moisture_pct": 66,
+        "risk_score": 54.0
+      },
+      {
+        "hour": "Now",
+        "rainfall_mm": 64.5,
+        "river_level_m": 2.85,
+        "soil_moisture_pct": 67.5,
+        "risk_score": 56.4
+      }
+    ]
+  },
+  {
+    "id": "mandi",
+    "name": "Mandi",
+    "state": "Himachal Pradesh",
+    "lat": 31.7087,
+    "lng": 76.932,
+    "river_basin": "Middle Beas Basin",
+    "authority": "Mandi DDMA",
+    "environmental_data": {
+      "rainfall": 58.0,
+      "rainfall_intensity": 15.5,
+      "soil_moisture": 64.0,
+      "river_level": 2.9,
+      "danger_level": 4.2,
+      "elevation": 760,
+      "slope": 26.0,
+      "catchment_area_sqkm": 3100
+    },
+    "risk_assessment": {
+      "risk_score": 52.0,
+      "risk_level": "MODERATE",
+      "trend": "rising",
+      "contributing_factors": [
+        "Inflow from upper catchments of Kullu and Pandoh dam",
+        "Moderate local rainfall",
+        "Soil saturation at 64%"
+      ],
+      "recommended_action": "\ud83d\udfe1 YELLOW WATCH: Keep continuous radio contact with Pandoh Dam control room regarding reservoir discharges.",
+      "last_updated": "2026-09-06T17:00:00+05:30"
+    },
+    "historical_24h": [
+      {
+        "hour": "00:00",
+        "rainfall_mm": 5.0,
+        "river_level_m": 1.6,
+        "soil_moisture_pct": 41,
+        "risk_score": 17.0
+      },
+      {
+        "hour": "06:00",
+        "rainfall_mm": 19.0,
+        "river_level_m": 2.0,
+        "soil_moisture_pct": 50,
+        "risk_score": 29.0
+      },
+      {
+        "hour": "12:00",
+        "rainfall_mm": 42.0,
+        "river_level_m": 2.5,
+        "soil_moisture_pct": 59,
+        "risk_score": 43.5
+      },
+      {
+        "hour": "Now",
+        "rainfall_mm": 58.0,
+        "river_level_m": 2.9,
+        "soil_moisture_pct": 64.0,
+        "risk_score": 52.0
+      }
+    ]
+  },
+  {
+    "id": "mangan",
+    "name": "Mangan (North Sikkim)",
+    "state": "Sikkim",
+    "lat": 27.5133,
+    "lng": 88.5298,
+    "river_basin": "Upper Teesta River Basin",
+    "authority": "North Sikkim District Administration & SDRF",
+    "environmental_data": {
+      "rainfall": 142.0,
+      "rainfall_intensity": 39.5,
+      "soil_moisture": 91.5,
+      "river_level": 5.1,
+      "danger_level": 4.8,
+      "elevation": 1310,
+      "slope": 41.0,
+      "catchment_area_sqkm": 4280
+    },
+    "risk_assessment": {
+      "risk_score": 92.6,
+      "risk_level": "CRITICAL",
+      "trend": "rising",
+      "contributing_factors": [
+        "Torrential cloudburst precipitation (142 mm, intensity 39.5 mm/h)",
+        "Ultra-saturated soil (91.5%) - zero infiltration capacity",
+        "Teesta river stage 0.3m above critical danger mark (5.10m / 4.80m)",
+        "Extremely steep gorge slopes (41\u00b0) triggering co-seismic landslide dams"
+      ],
+      "recommended_action": "\ud83d\udea8 RED ALERT: Immediate evacuation of Chungthang-Dikchu downstream corridors. Close Teesta NH-10. Coordinate with Army & BRO for emergency air-bridge readiness.",
+      "last_updated": "2026-09-06T17:35:00+05:30"
+    },
+    "historical_24h": [
+      {
+        "hour": "00:00",
+        "rainfall_mm": 15.0,
+        "river_level_m": 2.3,
+        "soil_moisture_pct": 58,
+        "risk_score": 33.0
+      },
+      {
+        "hour": "04:00",
+        "rainfall_mm": 28.0,
+        "river_level_m": 2.8,
+        "soil_moisture_pct": 66,
+        "risk_score": 43.5
+      },
+      {
+        "hour": "08:00",
+        "rainfall_mm": 56.0,
+        "river_level_m": 3.5,
+        "soil_moisture_pct": 77,
+        "risk_score": 62.0
+      },
+      {
+        "hour": "12:00",
+        "rainfall_mm": 95.0,
+        "river_level_m": 4.3,
+        "soil_moisture_pct": 84,
+        "risk_score": 79.5
+      },
+      {
+        "hour": "16:00",
+        "rainfall_mm": 132.0,
+        "river_level_m": 4.9,
+        "soil_moisture_pct": 89.5,
+        "risk_score": 89.0
+      },
+      {
+        "hour": "Now",
+        "rainfall_mm": 142.0,
+        "river_level_m": 5.1,
+        "soil_moisture_pct": 91.5,
+        "risk_score": 92.6
+      }
+    ]
+  },
+  {
+    "id": "gangtok",
+    "name": "Gangtok (East Sikkim)",
+    "state": "Sikkim",
+    "lat": 27.3314,
+    "lng": 88.6138,
+    "river_basin": "Rani Khola / Teesta Tributary",
+    "authority": "East Sikkim DDMA",
+    "environmental_data": {
+      "rainfall": 28.0,
+      "rainfall_intensity": 7.0,
+      "soil_moisture": 46.0,
+      "river_level": 1.6,
+      "danger_level": 3.8,
+      "elevation": 1650,
+      "slope": 27.0,
+      "catchment_area_sqkm": 1150
+    },
+    "risk_assessment": {
+      "risk_score": 24.8,
+      "risk_level": "LOW",
+      "trend": "falling",
+      "contributing_factors": [
+        "Light to intermittent showers",
+        "Moderate soil infiltration buffer available",
+        "Rani Khola river water level well within safe buffer"
+      ],
+      "recommended_action": "\ud83d\udfe2 GREEN STATUS: Standard routine monitoring. No immediate public alert required.",
+      "last_updated": "2026-09-06T17:15:00+05:30"
+    },
+    "historical_24h": [
+      {
+        "hour": "00:00",
+        "rainfall_mm": 6.0,
+        "river_level_m": 1.4,
+        "soil_moisture_pct": 40,
+        "risk_score": 14.5
+      },
+      {
+        "hour": "06:00",
+        "rainfall_mm": 14.0,
+        "river_level_m": 1.5,
+        "soil_moisture_pct": 43,
+        "risk_score": 19.2
+      },
+      {
+        "hour": "12:00",
+        "rainfall_mm": 22.0,
+        "river_level_m": 1.6,
+        "soil_moisture_pct": 45,
+        "risk_score": 23.0
+      },
+      {
+        "hour": "Now",
+        "rainfall_mm": 28.0,
+        "river_level_m": 1.6,
+        "soil_moisture_pct": 46.0,
+        "risk_score": 24.8
+      }
+    ]
+  },
+  {
+    "id": "dima_hasao",
+    "name": "Dima Hasao (Haflong)",
+    "state": "Assam",
+    "lat": 25.1764,
+    "lng": 93.0232,
+    "river_basin": "Jatinga & Kopili Basin",
+    "authority": "Assam State Disaster Management Authority (ASDMA)",
+    "environmental_data": {
+      "rainfall": 105.0,
+      "rainfall_intensity": 28.5,
+      "soil_moisture": 84.0,
+      "river_level": 4.15,
+      "danger_level": 4.3,
+      "elevation": 680,
+      "slope": 31.0,
+      "catchment_area_sqkm": 3680
+    },
+    "risk_assessment": {
+      "risk_score": 78.6,
+      "risk_level": "HIGH",
+      "trend": "rising",
+      "contributing_factors": [
+        "Heavy catchment rainfall in Barail mountain range",
+        "High soil moisture saturation (84%)",
+        "Jatinga river gauge at 4.15m (warning mark 4.0m, danger mark 4.3m)",
+        "Railway cut sections vulnerable to flash surges and mudslides"
+      ],
+      "recommended_action": "\u26a0\ufe0f ORANGE ALERT: Suspend passenger trains on Lumding-Badarpur hill section. Deploy rescue boats in New Haflong low-lying sectors.",
+      "last_updated": "2026-09-06T17:20:00+05:30"
+    },
+    "historical_24h": [
+      {
+        "hour": "00:00",
+        "rainfall_mm": 10.0,
+        "river_level_m": 2.0,
+        "soil_moisture_pct": 52,
+        "risk_score": 26.0
+      },
+      {
+        "hour": "06:00",
+        "rainfall_mm": 35.0,
+        "river_level_m": 2.7,
+        "soil_moisture_pct": 65,
+        "risk_score": 45.0
+      },
+      {
+        "hour": "12:00",
+        "rainfall_mm": 72.0,
+        "river_level_m": 3.5,
+        "soil_moisture_pct": 77,
+        "risk_score": 67.0
+      },
+      {
+        "hour": "Now",
+        "rainfall_mm": 105.0,
+        "river_level_m": 4.15,
+        "soil_moisture_pct": 84.0,
+        "risk_score": 78.6
+      }
+    ]
+  },
+  {
+    "id": "tawang",
+    "name": "Tawang",
+    "state": "Arunachal Pradesh",
+    "lat": 27.5861,
+    "lng": 91.8594,
+    "river_basin": "Tawang Chu Basin",
+    "authority": "Tawang District Administration",
+    "environmental_data": {
+      "rainfall": 48.0,
+      "rainfall_intensity": 11.0,
+      "soil_moisture": 59.0,
+      "river_level": 2.2,
+      "danger_level": 3.7,
+      "elevation": 3048,
+      "slope": 35.5,
+      "catchment_area_sqkm": 2400
+    },
+    "risk_assessment": {
+      "risk_score": 44.0,
+      "risk_level": "MODERATE",
+      "trend": "stable",
+      "contributing_factors": [
+        "Moderate rainfall mixed with glacial melt contribution",
+        "Moderate soil moisture saturation (59%)",
+        "Tawang Chu stream flowing with adequate bank margin"
+      ],
+      "recommended_action": "\ud83d\udfe1 YELLOW WATCH: Keep border roads clearing machinery positioned along Sela-Tawang axis.",
+      "last_updated": "2026-09-06T17:10:00+05:30"
+    },
+    "historical_24h": [
+      {
+        "hour": "00:00",
+        "rainfall_mm": 4.0,
+        "river_level_m": 1.3,
+        "soil_moisture_pct": 42,
+        "risk_score": 16.0
+      },
+      {
+        "hour": "06:00",
+        "rainfall_mm": 18.0,
+        "river_level_m": 1.7,
+        "soil_moisture_pct": 49,
+        "risk_score": 27.0
+      },
+      {
+        "hour": "12:00",
+        "rainfall_mm": 36.0,
+        "river_level_m": 2.0,
+        "soil_moisture_pct": 55,
+        "risk_score": 38.0
+      },
+      {
+        "hour": "Now",
+        "rainfall_mm": 48.0,
+        "river_level_m": 2.2,
+        "soil_moisture_pct": 59.0,
+        "risk_score": 44.0
+      }
+    ]
+  },
+  {
+    "id": "cherrapunji",
+    "name": "Cherrapunji (Sohra)",
+    "state": "Meghalaya",
+    "lat": 25.2986,
+    "lng": 91.7324,
+    "river_basin": "Southern Meghalaya Plateau / Shella Basin",
+    "authority": "East Khasi Hills DDMA",
+    "environmental_data": {
+      "rainfall": 115.0,
+      "rainfall_intensity": 32.0,
+      "soil_moisture": 78.0,
+      "river_level": 3.9,
+      "danger_level": 4.5,
+      "elevation": 1430.0,
+      "slope": 36.0,
+      "catchment_area_sqkm": 1780
+    },
+    "risk_assessment": {
+      "risk_score": 75.1,
+      "risk_level": "HIGH",
+      "trend": "stable",
+      "contributing_factors": [
+        "Extreme rainfall (115.0 mm) exceeding catchment absorption threshold",
+        "Cloudburst intensity rate (32.0 mm/hr)",
+        "High antecedent soil moisture (78.0%)",
+        "River level at 3.90m encroaching danger threshold",
+        "Steep terrain slope (36.0\u00b0) sharply accelerating hydraulic flow velocity"
+      ],
+      "recommended_action": "\u26a0\ufe0f WARNING (ORANGE): Prepare low-lying settlements for imminent evacuation. Halt traffic on vulnerable bridges and mountain highways. Position earth-moving equipment at critical landslide bottlenecks.",
+      "last_updated": "2026-09-06 18:09:20 IST"
+    },
+    "historical_24h": [
+      {
+        "hour": "00:00",
+        "rainfall_mm": 15.0,
+        "river_level_m": 1.7,
+        "soil_moisture_pct": 48,
+        "risk_score": 28.0
+      },
+      {
+        "hour": "06:00",
+        "rainfall_mm": 45.0,
+        "river_level_m": 2.3,
+        "soil_moisture_pct": 58,
+        "risk_score": 45.0
+      },
+      {
+        "hour": "12:00",
+        "rainfall_mm": 85.0,
+        "river_level_m": 2.9,
+        "soil_moisture_pct": 67,
+        "risk_score": 59.0
+      },
+      {
+        "hour": "Now",
+        "rainfall_mm": 115.0,
+        "river_level_m": 3.4,
+        "soil_moisture_pct": 72.0,
+        "risk_score": 68.2
+      }
+    ]
+  },
+  {
+    "id": "wayanad",
+    "name": "Wayanad (Western Ghats)",
+    "state": "Kerala",
+    "lat": 11.6854,
+    "lng": 76.132,
+    "river_basin": "Kabini River / Chaliyar Tributary",
+    "authority": "Wayanad District Disaster Management Authority",
+    "environmental_data": {
+      "rainfall": 89.0,
+      "rainfall_intensity": 24.0,
+      "soil_moisture": 86.5,
+      "river_level": 3.9,
+      "danger_level": 4.2,
+      "elevation": 950,
+      "slope": 32.5,
+      "catchment_area_sqkm": 2130
+    },
+    "risk_assessment": {
+      "risk_score": 76.5,
+      "risk_level": "HIGH",
+      "trend": "rising",
+      "contributing_factors": [
+        "Heavy southwest monsoon downpour on windward Western Ghats",
+        "High soil saturation (86.5%) on tea plantation slopes",
+        "River stage 0.3m below danger mark with active landslide risk"
+      ],
+      "recommended_action": "\u26a0\ufe0f ORANGE ALERT: Shift residents from Meppadi and Chooralmala slope edges to relief camps. Restrict night travel on ghat passes.",
+      "last_updated": "2026-09-06T17:30:00+05:30"
+    },
+    "historical_24h": [
+      {
+        "hour": "00:00",
+        "rainfall_mm": 12.0,
+        "river_level_m": 1.9,
+        "soil_moisture_pct": 55,
+        "risk_score": 29.0
+      },
+      {
+        "hour": "06:00",
+        "rainfall_mm": 34.0,
+        "river_level_m": 2.5,
+        "soil_moisture_pct": 68,
+        "risk_score": 48.0
+      },
+      {
+        "hour": "12:00",
+        "rainfall_mm": 68.0,
+        "river_level_m": 3.3,
+        "soil_moisture_pct": 79,
+        "risk_score": 66.0
+      },
+      {
+        "hour": "Now",
+        "rainfall_mm": 89.0,
+        "river_level_m": 3.9,
+        "soil_moisture_pct": 86.5,
+        "risk_score": 76.5
+      }
+    ]
+  }
+]
