@@ -1,330 +1,280 @@
-import React, { useState, useEffect } from 'react';
-import { Routes, Route, Navigate, useNavigate, useLocation } from 'react-router-dom';
-import Navbar from './components/Navbar';
-import Dashboard from './components/Dashboard';
+import React, { useState, useEffect, useCallback } from 'react';
+import { Routes, Route, Navigate, useNavigate, useLocation, useSearchParams } from 'react-router-dom';
+import Sidebar from './components/Sidebar';
+import TopBar from './components/TopBar';
+import AlertBanner from './components/AlertBanner';
+import DashboardView from './components/DashboardView';
 import GisMap from './components/GisMap';
-import PredictionSimulator from './components/PredictionSimulator';
-import AlertsPanel from './components/AlertsPanel';
-import DataFusionView from './components/DataFusionView';
-import DataSourcesView from './components/DataSourcesView';
-import AboutSIH from './components/AboutSIH';
+import RegionsView from './components/RegionsView';
+import AlertsView from './components/AlertsView';
+import ForecastView from './components/ForecastView';
+import ReportsView from './components/ReportsView';
+import SettingsView from './components/SettingsView';
+
 import { 
   fetchSystemOverview, 
   fetchRegions, 
   fetchAlerts, 
-  fetchDataSources 
+  fetchDataSources,
+  fetchMlInfo
 } from './services/api';
-import { ShieldAlert, AlertTriangle, X } from 'lucide-react';
 
 export default function App() {
   const navigate = useNavigate();
   const location = useLocation();
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const [regions, setRegions] = useState([]);
   const [selectedRegion, setSelectedRegion] = useState(null);
   const [overview, setOverview] = useState({});
   const [alerts, setAlerts] = useState([]);
-  const [dataSources, setDataSources] = useState([]);
+  const [mlInfo, setMlInfo] = useState({});
+  const [isOnline, setIsOnline] = useState(true);
+  const [lastUpdated, setLastUpdated] = useState('');
   const [loading, setLoading] = useState(true);
-  const [dismissBanner, setDismissBanner] = useState(false);
+  const [isRefreshing, setIsRefreshing] = useState(false);
+  const [isOpenMobileMenu, setIsOpenMobileMenu] = useState(false);
 
-  // Load initial data
-  const loadInitialData = async () => {
+  // Load all telemetry
+  const loadTelemetry = useCallback(async (isManual = false) => {
+    if (isManual) setIsRefreshing(true);
     try {
-      setLoading(true);
-      const [overviewData, regionsData, alertsData, sourcesData] = await Promise.all([
+      const [overviewData, regionsData, alertsData, mlData] = await Promise.all([
         fetchSystemOverview(),
         fetchRegions(),
         fetchAlerts(),
-        fetchDataSources()
+        fetchMlInfo()
       ]);
 
-      setOverview(overviewData);
-      setRegions(regionsData);
-      setAlerts(alertsData);
-      setDataSources(sourcesData);
+      setOverview(overviewData || {});
+      setRegions(regionsData || []);
+      setAlerts(alertsData || []);
+      setMlInfo(mlData || {});
+      setIsOnline(true);
+      
+      const now = new Date();
+      setLastUpdated(now.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true }) + ' IST');
 
-      // Default selected region to Chamoli (or highest risk region)
+      // Set initial selected region
       if (regionsData && regionsData.length > 0) {
-        const criticalReg = regionsData.find(r => r.id === 'chamoli') || regionsData[0];
-        setSelectedRegion(criticalReg);
+        setSelectedRegion(prev => {
+          // If query param is present, prefer it
+          const queryRegionId = searchParams.get('region');
+          if (queryRegionId) {
+            const matched = regionsData.find(r => r.id.toLowerCase() === queryRegionId.toLowerCase());
+            if (matched) return matched;
+          }
+          if (prev) {
+            const updated = regionsData.find(r => r.id === prev.id);
+            if (updated) return updated;
+          }
+          // Default to Chamoli or highest risk region
+          const defaultStored = localStorage.getItem('ff_default_region');
+          if (defaultStored) {
+            const matchedStored = regionsData.find(r => r.id === defaultStored);
+            if (matchedStored) return matchedStored;
+          }
+          return regionsData.find(r => r.id === 'chamoli') || regionsData[0];
+        });
       }
     } catch (err) {
-      console.error("Error loading system telemetry:", err);
+      console.warn("Live telemetry sync failed, running in resilient mode:", err);
+      setIsOnline(false);
     } finally {
       setLoading(false);
+      if (isManual) setIsRefreshing(false);
     }
-  };
+  }, [searchParams]);
 
   useEffect(() => {
-    loadInitialData();
-  }, []);
+    loadTelemetry();
+  }, [loadTelemetry]);
 
-  // When prediction is applied in simulator, update local region state dynamically
-  const handlePredictionApplied = (predictionResult, params) => {
-    if (!selectedRegion) return;
+  // Background auto-refresh timer based on settings
+  useEffect(() => {
+    const storedInterval = localStorage.getItem('ff_refresh_interval') || '30';
+    if (storedInterval === 'manual') return;
 
-    const updatedRegion = {
-      ...selectedRegion,
-      environmental_data: {
-        ...selectedRegion.environmental_data,
-        rainfall: params.rainfall,
-        rainfall_intensity: params.rainfall_intensity,
-        soil_moisture: params.soil_moisture,
-        river_level: params.river_level,
-        elevation: params.elevation,
-        slope: params.slope
-      },
-      risk_assessment: {
-        ...selectedRegion.risk_assessment,
-        risk_score: predictionResult.risk_score,
-        risk_level: predictionResult.risk_level,
-        contributing_factors: predictionResult.contributing_factors,
-        recommended_action: predictionResult.recommended_action,
-        last_updated: predictionResult.timestamp
-      }
-    };
+    const intervalSeconds = Math.max(10, parseInt(storedInterval, 10) || 30);
+    const timer = setInterval(() => {
+      loadTelemetry(false);
+    }, intervalSeconds * 1000);
 
-    setSelectedRegion(updatedRegion);
+    return () => clearInterval(timer);
+  }, [loadTelemetry]);
 
-    // Update in regions list
-    setRegions(prev => prev.map(r => r.id === updatedRegion.id ? updatedRegion : r));
-
-    // If critical/high, prepend dynamic alert to alerts list
-    if (predictionResult.risk_level === 'CRITICAL' || predictionResult.risk_level === 'HIGH') {
-      const newAlert = {
-        id: `ALT-SIM-${Date.now().toString().slice(-4)}`,
-        timestamp: new Date().toISOString(),
-        time_display: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) + ' (Simulated)',
-        region_id: updatedRegion.id,
-        region: updatedRegion.name,
-        state: updatedRegion.state,
-        risk_score: predictionResult.risk_score,
-        risk_level: predictionResult.risk_level,
-        trigger: `User simulation trigger: Rainfall ${params.rainfall}mm + Soil ${params.soil_moisture}%`,
-        factors: predictionResult.contributing_factors.slice(0, 3),
-        action_taken: predictionResult.recommended_action,
-        status: 'ACTIVE'
-      };
-      setAlerts(prev => [newAlert, ...prev]);
-    }
+  // Select region handler - syncs both state and URL parameter
+  const handleSelectRegion = (region) => {
+    if (!region) return;
+    setSelectedRegion(region);
+    setSearchParams(prev => {
+      const next = new URLSearchParams(prev);
+      next.set('region', region.id);
+      return next;
+    }, { replace: true });
   };
 
-  const handleNavigateTab = (tab) => {
-    switch (tab) {
-      case 'map':
-      case 'live-map':
-        navigate('/map');
-        break;
-      case 'prediction':
-      case 'simulator':
-        navigate('/prediction');
-        break;
-      case 'alerts':
-      case 'warnings':
-        navigate('/alerts');
-        break;
-      case 'fusion':
-      case 'data-fusion':
-        navigate('/data-fusion');
-        break;
-      case 'sources':
-      case 'data-sources':
-        navigate('/data-sources');
-        break;
-      case 'about':
-        navigate('/about');
-        break;
-      default:
-        navigate('/');
-        break;
-    }
-  };
-
-  const criticalAlertsCount = alerts.filter(a => a.risk_level === 'CRITICAL').length;
+  const activeAlertsCount = alerts.filter(a => a.risk_level === 'CRITICAL' || a.risk_level === 'HIGH').length;
 
   return (
-    <div className="min-h-screen bg-[#070b19] flex flex-col text-slate-100">
-      {/* Top Navbar */}
-      <Navbar
-        alertCount={criticalAlertsCount}
-        overallStatus={overview.overall_status || 'CRITICAL'}
+    <div className="min-h-screen bg-bb-bg text-bb-text flex flex-col font-sans selection:bg-bb-accent selection:text-white">
+      {/* 1. Left Sidebar Navigation */}
+      <Sidebar 
+        alertCount={activeAlertsCount}
+        isOpenMobile={isOpenMobileMenu}
+        onCloseMobile={() => setIsOpenMobileMenu(false)}
       />
 
-      {/* Flashing Red Emergency Banner for Critical Regions */}
-      {!dismissBanner && criticalAlertsCount > 0 && (
-        <div className="bg-gradient-to-r from-red-950 via-red-900 to-red-950 border-b border-red-700 px-4 py-2 text-xs flex items-center justify-between shadow-lg">
-          <div className="max-w-7xl mx-auto flex items-center space-x-2.5 text-white">
-            <span className="flex h-2.5 w-2.5 relative">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-red-500"></span>
-            </span>
-            <span className="font-bold uppercase tracking-wider text-red-200">
-              🚨 CRITICAL FLASH FLOOD WARNING ACTIVE:
-            </span>
-            <span className="text-red-100 hidden sm:inline">
-              Mangan (Teesta Basin) & Chamoli (Alaknanda Basin) breached flash thresholds.
-            </span>
-            <button
-              onClick={() => navigate('/alerts')}
-              className="underline font-semibold hover:text-red-200 ml-2"
-            >
-              View Early Warning SOPs &rarr;
-            </button>
-          </div>
-          <button
-            onClick={() => setDismissBanner(true)}
-            className="text-red-300 hover:text-white p-1"
-          >
-            <X className="w-4 h-4" />
-          </button>
-        </div>
-      )}
+      {/* 2. Main Layout Content Area (Offset by sidebar width on desktop) */}
+      <div className="flex-1 flex flex-col lg:pl-60 transition-all duration-200">
+        {/* Compact Top Bar */}
+        <TopBar
+          onToggleMobileMenu={() => setIsOpenMobileMenu(!isOpenMobileMenu)}
+          regions={regions}
+          selectedRegion={selectedRegion}
+          onSelectRegion={handleSelectRegion}
+          lastUpdated={lastUpdated}
+          onRefresh={() => loadTelemetry(true)}
+          isRefreshing={isRefreshing}
+          isOnline={isOnline}
+          alerts={alerts}
+          unreadAlertsCount={activeAlertsCount}
+        />
 
-      {/* Main App Content Viewport */}
-      <main className="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8">
-        {loading ? (
-          <div className="flex flex-col items-center justify-center min-h-[400px] space-y-3">
-            <div className="w-10 h-10 border-4 border-blue-500/30 border-t-blue-500 rounded-full animate-spin"></div>
-            <p className="text-xs font-mono text-slate-400">Loading Multi-Source Telemetry Grid...</p>
-          </div>
-        ) : (
-          <Routes>
-            {/* Dashboard routes */}
-            <Route 
-              path="/" 
-              element={
-                <Dashboard
-                  regions={regions}
-                  selectedRegion={selectedRegion}
-                  onSelectRegion={(reg) => setSelectedRegion(reg)}
-                  overview={overview}
-                  onNavigateTab={handleNavigateTab}
-                  onRefresh={loadInitialData}
-                />
-              } 
-            />
-            <Route 
-              path="/dashboard" 
-              element={
-                <Dashboard
-                  regions={regions}
-                  selectedRegion={selectedRegion}
-                  onSelectRegion={(reg) => setSelectedRegion(reg)}
-                  overview={overview}
-                  onNavigateTab={handleNavigateTab}
-                  onRefresh={loadInitialData}
-                />
-              } 
-            />
+        {/* Full-Width Alert Banner (Rendered only when active alert exists) */}
+        <AlertBanner alerts={alerts} regions={regions} />
 
-            {/* GIS Map routes */}
-            <Route 
-              path="/map" 
-              element={
-                <div className="space-y-4">
-                  <div className="flex flex-wrap items-center justify-between gap-2 bg-command-darker p-4 rounded-xl border border-command-border shadow-xl">
-                    <div>
-                      <h2 className="text-base font-bold text-white">Interactive GIS Hazard Map</h2>
-                      <p className="text-xs text-slate-400">
-                        Geographic distribution of flash flood hazard tiers across monitored Indian mountain basins.
-                      </p>
-                    </div>
-                    <div className="text-xs font-mono text-slate-400">
-                      Monitored: <strong className="text-white">{regions.length} Catchments</strong>
-                    </div>
-                  </div>
-                  <GisMap
+        {/* Viewport Content */}
+        <main className="flex-1 p-3.5 sm:p-5 lg:p-6 max-w-[1700px] w-full mx-auto">
+          {loading ? (
+            <div className="flex flex-col items-center justify-center min-h-[450px] space-y-3 font-mono text-xs text-bb-muted">
+              <div className="w-8 h-8 border-2 border-bb-accent/30 border-t-bb-accent rounded-full animate-spin" />
+              <p>Establishing Secure Hydro-Telemetry Gateway...</p>
+            </div>
+          ) : (
+            <Routes>
+              {/* Dashboard View */}
+              <Route 
+                path="/" 
+                element={
+                  <DashboardView 
                     regions={regions}
                     selectedRegion={selectedRegion}
-                    onSelectRegion={(reg) => {
-                      setSelectedRegion(reg);
-                      navigate('/');
-                    }}
-                    height="640px"
+                    onSelectRegion={handleSelectRegion}
+                    overview={overview}
+                    mlInfo={mlInfo}
                   />
-                </div>
-              } 
-            />
-            <Route path="/live-map" element={<Navigate to="/map" replace />} />
-            <Route path="/gis-map" element={<Navigate to="/map" replace />} />
+                } 
+              />
+              <Route 
+                path="/dashboard" 
+                element={
+                  <DashboardView 
+                    regions={regions}
+                    selectedRegion={selectedRegion}
+                    onSelectRegion={handleSelectRegion}
+                    overview={overview}
+                    mlInfo={mlInfo}
+                  />
+                } 
+              />
 
-            {/* Prediction Simulator routes */}
-            <Route 
-              path="/prediction" 
-              element={
-                <PredictionSimulator
-                  selectedRegion={selectedRegion}
-                  onPredictionApplied={handlePredictionApplied}
-                />
-              } 
-            />
-            <Route path="/prediction-simulator" element={<Navigate to="/prediction" replace />} />
-            <Route path="/simulator" element={<Navigate to="/prediction" replace />} />
+              {/* Live GIS Map View */}
+              <Route 
+                path="/map" 
+                element={
+                  <div className="space-y-4">
+                    <GisMap 
+                      regions={regions}
+                      selectedRegion={selectedRegion}
+                      onSelectRegion={handleSelectRegion}
+                      height="740px"
+                    />
+                  </div>
+                } 
+              />
+              <Route path="/gis-map" element={<Navigate to="/map" replace />} />
+              <Route path="/live-map" element={<Navigate to="/map" replace />} />
 
-            {/* Alerts & Warnings routes */}
-            <Route 
-              path="/alerts" 
-              element={
-                <AlertsPanel
-                  alerts={alerts}
-                  regions={regions}
-                  onSelectRegion={(reg) => {
-                    setSelectedRegion(reg);
-                    navigate('/');
-                  }}
-                />
-              } 
-            />
-            <Route path="/alerts-warnings" element={<Navigate to="/alerts" replace />} />
-            <Route path="/warnings" element={<Navigate to="/alerts" replace />} />
+              {/* Regions Directory View */}
+              <Route 
+                path="/regions" 
+                element={
+                  <RegionsView 
+                    regions={regions}
+                    selectedRegion={selectedRegion}
+                    onSelectRegion={handleSelectRegion}
+                  />
+                } 
+              />
 
-            {/* Data Fusion routes */}
-            <Route 
-              path="/data-fusion" 
-              element={
-                <DataFusionView
-                  regions={regions}
-                  selectedRegion={selectedRegion}
-                  onSelectRegion={(reg) => setSelectedRegion(reg)}
-                />
-              } 
-            />
-            <Route path="/fusion" element={<Navigate to="/data-fusion" replace />} />
+              {/* Alerts & Warnings View */}
+              <Route 
+                path="/alerts" 
+                element={
+                  <AlertsView 
+                    alerts={alerts}
+                    regions={regions}
+                    onSelectRegion={handleSelectRegion}
+                  />
+                } 
+              />
+              <Route path="/alerts-warnings" element={<Navigate to="/alerts" replace />} />
+              <Route path="/warnings" element={<Navigate to="/alerts" replace />} />
 
-            {/* Data Sources routes */}
-            <Route 
-              path="/data-sources" 
-              element={
-                <DataSourcesView dataSources={dataSources} />
-              } 
-            />
-            <Route path="/sources" element={<Navigate to="/data-sources" replace />} />
+              {/* Forecast View */}
+              <Route 
+                path="/forecast" 
+                element={
+                  <ForecastView 
+                    selectedRegion={selectedRegion} 
+                  />
+                } 
+              />
 
-            {/* About SIH routes */}
-            <Route path="/about" element={<AboutSIH />} />
-            <Route path="/about-sih" element={<Navigate to="/about" replace />} />
+              {/* Reports View */}
+              <Route 
+                path="/reports" 
+                element={
+                  <ReportsView 
+                    regions={regions}
+                    overview={overview}
+                    mlInfo={mlInfo}
+                  />
+                } 
+              />
 
-            {/* Wildcard Fallback */}
-            <Route path="*" element={<Navigate to="/" replace />} />
-          </Routes>
-        )}
-      </main>
+              {/* Settings View */}
+              <Route 
+                path="/settings" 
+                element={
+                  <SettingsView 
+                    regions={regions} 
+                  />
+                } 
+              />
 
-      {/* Tactical Footer */}
-      <footer className="bg-command-darkest border-t border-command-border px-4 py-3 text-xs text-slate-500">
-        <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-2">
+              {/* Wildcard Fallback */}
+              <Route path="*" element={<Navigate to="/" replace />} />
+            </Routes>
+          )}
+        </main>
+
+        {/* Dense Terminal Footer */}
+        <footer className="border-t border-bb-border bg-bb-sidebar px-4 py-2.5 text-[11px] font-mono text-bb-subtle flex flex-wrap items-center justify-between gap-2">
           <div className="flex items-center space-x-2">
-            <ShieldAlert className="w-4 h-4 text-blue-500" />
-            <span>Smart India Hackathon 2026 &bull; Problem Statement SIH26192 &bull; Ministry of Home Affairs</span>
-          </div>
-          <div className="flex items-center space-x-4 text-[11px] font-mono">
-            <span>Team: <strong className="text-slate-400">DeepCoders</strong></span>
+            <span className="text-bb-muted font-bold">MHA FlashFlood-AI</span>
             <span>&bull;</span>
-            <span>Version: <strong className="text-slate-400">1.0.0-MVP</strong></span>
+            <span>Problem Statement SIH26192 &bull; Disaster Management</span>
           </div>
-        </div>
-      </footer>
+
+          <div className="flex items-center space-x-3 text-bb-subtle">
+            <span>Terminal: <strong className="text-slate-300">Bloomberg Command v2.0</strong></span>
+            <span>&bull;</span>
+            <span>Model: <strong className="text-emerald-400">RandomForest R² 0.942</strong></span>
+          </div>
+        </footer>
+      </div>
     </div>
   );
 }
