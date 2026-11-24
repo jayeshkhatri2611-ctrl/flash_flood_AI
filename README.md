@@ -1,4 +1,4 @@
-# AI-Based Flash Flood Early Warning System for Hilly Regions
+# FlashFlood-AI: Flash Flood Early Warning System for Hilly Regions
 
 **Smart India Hackathon 2026 Prototype (SIH26192)**  
 *Theme:* Disaster Management | *Category:* Software | *Organization:* Ministry of Home Affairs (MHA) | *Team:* DeepCoders
