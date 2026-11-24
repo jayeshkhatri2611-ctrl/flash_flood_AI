@@ -385,3 +385,32 @@ export async function fetchDataSources() {
     ];
   }
 }
+
+
+export async function fetchMlInfo() {
+  try {
+    const res = await fetch(`${API_BASE_URL}/ml-info`);
+    if (!res.ok) throw new Error("Backend response error");
+    return await res.json();
+  } catch (err) {
+    console.warn("Backend not reached for ml-info:", err.message);
+    return {
+      model_type: "RandomForestRegressor",
+      algorithm: "scikit-learn",
+      training_source: "flood_risk_dataset_india.csv",
+      metrics: {
+        r2_score: 0.9424,
+        mae: 3.47,
+        rmse: 4.44
+      },
+      feature_importances: {
+        runoff_potential_factor: 57.79,
+        rainfall_intensity: 15.02,
+        river_level: 10.56,
+        river_danger_ratio: 9.79,
+        soil_saturation_ratio: 2.09,
+        soil_moisture: 1.99
+      }
+    };
+  }
+}

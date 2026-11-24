@@ -4,88 +4,58 @@
 
 @layer base {
   body {
-    background-color: #070b19;
-    color: #e2e8f0;
+    background-color: #080F1F;
+    color: #F8FAFC;
     font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    letter-spacing: -0.01em;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Tabular numbers for all telemetry and data values */
+  .tabular-nums {
+    font-variant-numeric: tabular-nums;
   }
 }
 
-/* Custom Tactical Scrollbar */
+/* Bloomberg/Grafana Dense Tactical Scrollbar */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 6px;
+  height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #0d1527;
+  background: #0B1427;
 }
 ::-webkit-scrollbar-thumb {
-  background: #243456;
+  background: #1E2D4A;
   border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #3b82f6;
+  background: #00A8FF;
 }
 
-/* Leaflet Map Styling Tweaks */
+/* Leaflet Dark Surface Map Styling */
 .leaflet-container {
   width: 100%;
   height: 100%;
-  background-color: #0b1329 !important;
-  border-radius: 0.75rem;
+  background-color: #080F1F !important;
+  border-radius: 8px;
 }
 
 .leaflet-popup-content-wrapper {
-  background: #0d1527 !important;
-  color: #f1f5f9 !important;
-  border: 1px solid #243456;
-  border-radius: 0.5rem !important;
-  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.6) !important;
+  background: #111D33 !important;
+  color: #F8FAFC !important;
+  border: 1px solid #1E2D4A !important;
+  border-radius: 8px !important;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.7) !important;
+  padding: 4px !important;
 }
 
 .leaflet-popup-tip {
-  background: #0d1527 !important;
-  border: 1px solid #243456;
+  background: #111D33 !important;
+  border: 1px solid #1E2D4A !important;
 }
 
-/* Custom Marker Pulse Animations */
-@keyframes pulse-critical {
-  0% {
-    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.8);
-  }
-  70% {
-    box-shadow: 0 0 0 18px rgba(239, 68, 68, 0);
-  }
-  100% {
-    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0);
-  }
-}
-
-@keyframes pulse-high {
-  0% {
-    box-shadow: 0 0 0 0 rgba(249, 115, 22, 0.7);
-  }
-  70% {
-    box-shadow: 0 0 0 14px rgba(249, 115, 22, 0);
-  }
-  100% {
-    box-shadow: 0 0 0 0 rgba(249, 115, 22, 0);
-  }
-}
-
-.marker-critical {
-  animation: pulse-critical 1.8s infinite;
-  border-radius: 50%;
-}
-
-.marker-high {
-  animation: pulse-high 2.2s infinite;
-  border-radius: 50%;
-}
-
-/* Radar Sweep Utility */
-.radar-grid {
-  background-size: 24px 24px;
-  background-image: 
-    linear-gradient(to right, rgba(36, 52, 86, 0.25) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(36, 52, 86, 0.25) 1px, transparent 1px);
+/* Subtle transitions for professional feel */
+button, a {
+  transition: all 0.15s ease-in-out;
 }

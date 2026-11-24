@@ -7,35 +7,47 @@ export default {
   theme: {
     extend: {
       colors: {
+        bb: {
+          bg: '#080F1F',
+          sidebar: '#0B1427',
+          card: '#111D33',
+          panel: '#17243B',
+          border: '#1E2D4A',
+          'border-subtle': 'rgba(0, 168, 255, 0.16)',
+          accent: '#00A8FF',
+          'accent-bright': '#00D4FF',
+          text: '#F8FAFC',
+          muted: '#94A3B8',
+          subtle: '#64748B',
+        },
+        // Backwards compatibility with previous classes
         command: {
-          darkest: '#070b19',
-          darker: '#0d1527',
-          dark: '#141f36',
-          card: '#18243f',
-          border: '#243456',
-          accent: '#3b82f6',
-          muted: '#8b9bb4'
+          darkest: '#080F1F',
+          darker: '#0B1427',
+          dark: '#111D33',
+          card: '#17243B',
+          border: '#1E2D4A',
+          accent: '#00A8FF',
+          muted: '#94A3B8'
         },
         risk: {
-          low: '#10b981',
-          moderate: '#f59e0b',
-          high: '#f97316',
-          critical: '#ef4444'
+          critical: '#EF4444',
+          high: '#F97316',
+          moderate: '#FACC15',
+          low: '#10B981',
         }
       },
-      keyframes: {
-        pulseGlow: {
-          '0%, 100%': { opacity: '1', transform: 'scale(1)' },
-          '50%': { opacity: '0.6', transform: 'scale(1.08)' }
-        },
-        radarScan: {
-          '0%': { transform: 'rotate(0deg)' },
-          '100%': { transform: 'rotate(360deg)' }
-        }
+      fontFamily: {
+        sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+        mono: ['ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', 'monospace']
       },
-      animation: {
-        'pulse-glow': 'pulseGlow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-        'radar-scan': 'radarScan 4s linear infinite'
+      borderRadius: {
+        DEFAULT: '8px',
+        card: '8px'
+      },
+      boxShadow: {
+        flat: '0 1px 3px 0 rgba(0, 0, 0, 0.3)',
+        subtle: '0 2px 8px -2px rgba(0, 168, 255, 0.08)'
       }
     },
   },
