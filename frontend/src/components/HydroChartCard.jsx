@@ -8,17 +8,16 @@ import {
   YAxis,
   CartesianGrid,
   Tooltip,
-  ReferenceLine,
-  Legend
+  ReferenceLine
 } from 'recharts';
-import { Waves, CloudRain, AlertTriangle, Info } from 'lucide-react';
+import { Waves, CloudRain, Info, Activity } from 'lucide-react';
 
 export default function HydroChartCard({ selectedRegion }) {
   const [activeRange, setActiveRange] = useState('24h');
 
   if (!selectedRegion) {
     return (
-      <div className="h-96 bg-bb-card border border-bb-border rounded-lg p-5 flex items-center justify-center text-xs text-bb-muted font-mono">
+      <div className="h-96 bg-app-card rounded-panel border border-app-border p-5 flex items-center justify-center text-xs text-app-muted">
         Select a catchment basin to load hydrological telemetry.
       </div>
     );
@@ -38,15 +37,16 @@ export default function HydroChartCard({ selectedRegion }) {
   const CustomTooltip = ({ active, payload, label }) => {
     if (active && payload && payload.length) {
       return (
-        <div className="bg-[#0B1427] border border-bb-border p-3 rounded shadow-2xl text-xs font-mono space-y-1.5 z-50">
-          <div className="font-bold text-white border-b border-bb-border pb-1">
-            Hour: {label}
+        <div className="bg-app-card/95 backdrop-blur-md border border-app-border p-3.5 rounded-xl shadow-2xl text-xs space-y-2 z-50">
+          <div className="font-semibold text-white border-b border-app-border pb-1.5 flex items-center justify-between">
+            <span>Time: {label}</span>
+            <span className="text-[10px] text-app-muted font-normal">Observed</span>
           </div>
           {payload.map((item, idx) => (
-            <div key={idx} className="flex items-center justify-between space-x-4">
-              <span className="flex items-center space-x-1.5" style={{ color: item.color }}>
-                <span className="w-2 h-2 rounded-full" style={{ backgroundColor: item.color }} />
-                <span>{item.name}:</span>
+            <div key={idx} className="flex items-center justify-between space-x-5">
+              <span className="flex items-center space-x-2" style={{ color: item.color }}>
+                <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: item.color }} />
+                <span className="font-medium text-slate-300">{item.name}:</span>
               </span>
               <span className="font-bold text-white tabular-nums">
                 {Number(item.value).toFixed(2)} {item.unit || ''}
@@ -60,25 +60,26 @@ export default function HydroChartCard({ selectedRegion }) {
   };
 
   return (
-    <div className="bg-bb-card border border-bb-border rounded-lg p-4 sm:p-5 shadow-flat flex flex-col justify-between">
-      {/* Card Header & Range Filter */}
-      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-bb-border/70 pb-3 mb-4">
+    <div className="bg-app-card rounded-panel border border-app-border p-5 shadow-card flex flex-col justify-between">
+      {/* Header & Range Filter */}
+      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-app-border/70 pb-3.5 mb-4">
         <div>
           <div className="flex items-center space-x-2">
-            <h3 className="text-xs font-bold uppercase tracking-wider text-white flex items-center space-x-1.5">
+            <h3 className="text-sm font-bold text-white flex items-center space-x-2">
+              <Activity className="w-4 h-4 text-app-primary" />
               <span>Hydrological Response Telemetry</span>
             </h3>
-            <span className="text-[10px] font-mono px-1.5 py-0.2 rounded bg-bb-panel text-bb-muted border border-bb-border">
+            <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-app-elevated text-app-cyan border border-app-border">
               {selectedRegion.river_basin}
             </span>
           </div>
-          <p className="text-[11px] text-bb-subtle mt-0.5">
-            Precipitation surge (bars) vs downstream river gauge height (line)
+          <p className="text-xs text-app-muted mt-1">
+            Upstream precipitation volume (bars) vs downstream river gauge height (line)
           </p>
         </div>
 
         {/* Range Selector */}
-        <div className="flex items-center space-x-1 bg-[#091122] p-0.5 rounded border border-bb-border text-[11px] font-mono">
+        <div className="flex items-center space-x-1 bg-app-elevated/70 p-1 rounded-full border border-app-border text-xs">
           {[
             { id: '1h', label: '1H', available: true },
             { id: '6h', label: '6H', available: true },
@@ -90,12 +91,12 @@ export default function HydroChartCard({ selectedRegion }) {
               onClick={() => btn.available && setActiveRange(btn.id)}
               disabled={!btn.available}
               title={!btn.available ? btn.reason : undefined}
-              className={`px-2.5 py-1 rounded transition-colors ${
+              className={`px-3 py-1 rounded-full text-xs font-medium transition-all ${
                 activeRange === btn.id && btn.available
-                  ? 'bg-bb-accent text-white font-bold shadow-sm'
+                  ? 'bg-app-primary text-white shadow-sm'
                   : btn.available
-                    ? 'text-bb-muted hover:text-white hover:bg-bb-panel'
-                    : 'text-bb-subtle/40 cursor-not-allowed line-through'
+                    ? 'text-app-muted hover:text-white hover:bg-app-card'
+                    : 'text-app-muted/30 cursor-not-allowed line-through'
               }`}
             >
               {btn.label}
@@ -107,23 +108,29 @@ export default function HydroChartCard({ selectedRegion }) {
       {/* Recharts Canvas */}
       <div className="h-72 w-full">
         <ResponsiveContainer width="100%" height="100%">
-          <ComposedChart data={filteredData} margin={{ top: 10, right: 10, left: -10, bottom: 0 }}>
-            <CartesianGrid stroke="#1E2D4A" strokeDasharray="3 3" opacity={0.6} />
+          <ComposedChart data={filteredData} margin={{ top: 12, right: 12, left: -8, bottom: 0 }}>
+            <defs>
+              <linearGradient id="rainGradient" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor="#3B82F6" stopOpacity={0.9} />
+                <stop offset="100%" stopColor="#22D3EE" stopOpacity={0.4} />
+              </linearGradient>
+            </defs>
+            <CartesianGrid stroke="#1B2B45" strokeDasharray="3 3" opacity={0.5} vertical={false} />
             <XAxis 
               dataKey="hour" 
               stroke="#64748B" 
               fontSize={11} 
               tickLine={false}
-              fontFamily="monospace"
+              axisLine={{ stroke: '#1B2B45' }}
             />
             {/* Left Axis: Rainfall (mm) */}
             <YAxis 
               yAxisId="left" 
-              stroke="#00A8FF" 
+              stroke="#3B82F6" 
               fontSize={11} 
               tickLine={false}
-              fontFamily="monospace"
-              label={{ value: 'Rainfall (mm)', angle: -90, position: 'insideLeft', fill: '#00A8FF', fontSize: 10 }}
+              axisLine={false}
+              label={{ value: 'Rainfall (mm)', angle: -90, position: 'insideLeft', fill: '#3B82F6', fontSize: 11, offset: 12 }}
             />
             {/* Right Axis: River Gauge (m) */}
             <YAxis 
@@ -132,9 +139,9 @@ export default function HydroChartCard({ selectedRegion }) {
               stroke="#F97316" 
               fontSize={11} 
               tickLine={false}
-              fontFamily="monospace"
+              axisLine={false}
               domain={[0, Math.max(dangerLevel + 1.0, 6.0)]}
-              label={{ value: 'River Stage (m)', angle: 90, position: 'insideRight', fill: '#F97316', fontSize: 10 }}
+              label={{ value: 'River Stage (m)', angle: 90, position: 'insideRight', fill: '#F97316', fontSize: 11, offset: 12 }}
             />
             
             <Tooltip content={<CustomTooltip />} />
@@ -146,7 +153,7 @@ export default function HydroChartCard({ selectedRegion }) {
               stroke="#EF4444" 
               strokeDasharray="4 4" 
               strokeWidth={1.5}
-              label={{ value: `DANGER ${dangerLevel}m`, fill: '#EF4444', fontSize: 10, position: 'right' }} 
+              label={{ value: `Danger Mark: ${dangerLevel}m`, fill: '#EF4444', fontSize: 11, position: 'top' }} 
             />
 
             {/* Bars for Rainfall */}
@@ -154,10 +161,10 @@ export default function HydroChartCard({ selectedRegion }) {
               yAxisId="left" 
               dataKey="rainfall_mm" 
               name="Rainfall" 
-              fill="#00A8FF" 
+              fill="url(#rainGradient)" 
               unit="mm" 
-              radius={[3, 3, 0, 0]} 
-              barSize={20}
+              radius={[4, 4, 0, 0]} 
+              barSize={18}
             />
 
             {/* Line for River Gauge */}
@@ -168,28 +175,29 @@ export default function HydroChartCard({ selectedRegion }) {
               name="River Level" 
               stroke="#F97316" 
               strokeWidth={2.5} 
-              dot={{ r: 3, fill: '#F97316', stroke: '#080F1F', strokeWidth: 1.5 }}
+              dot={{ r: 3, fill: '#F97316', stroke: '#080E1B', strokeWidth: 2 }}
+              activeDot={{ r: 5, fill: '#F97316', stroke: '#FFFFFF', strokeWidth: 2 }}
               unit="m" 
             />
           </ComposedChart>
         </ResponsiveContainer>
       </div>
 
-      {/* Chart Footer Legend & Legend Meta */}
-      <div className="mt-3 pt-2.5 border-t border-bb-border/50 flex flex-wrap items-center justify-between text-[11px] font-mono text-bb-muted gap-2">
+      {/* Legend & Meta */}
+      <div className="mt-4 pt-3 border-t border-app-border/60 flex flex-wrap items-center justify-between text-xs text-app-muted gap-2">
         <div className="flex items-center space-x-4">
-          <span className="flex items-center space-x-1.5">
-            <span className="w-2.5 h-2.5 rounded-sm bg-[#00A8FF]" />
-            <span className="text-slate-300">Rainfall (IMD AWS)</span>
+          <span className="flex items-center space-x-2">
+            <span className="w-3 h-3 rounded-sm bg-gradient-to-t from-cyan-400 to-blue-500" />
+            <span className="text-slate-200 font-medium">Precipitation (IMD AWS)</span>
           </span>
-          <span className="flex items-center space-x-1.5">
-            <span className="w-2.5 h-0.5 bg-[#F97316]" />
-            <span className="text-slate-300">River Stage (CWC Telemetry)</span>
+          <span className="flex items-center space-x-2">
+            <span className="w-3 h-0.5 bg-[#F97316]" />
+            <span className="text-slate-200 font-medium">River Stage (CWC)</span>
           </span>
         </div>
 
-        <div className="flex items-center space-x-1 text-bb-subtle">
-          <Info className="w-3 h-3 text-bb-accent" />
+        <div className="flex items-center space-x-1.5 text-app-subtle">
+          <Info className="w-3.5 h-3.5 text-app-cyan" />
           <span>Hydraulic response lag: ~2 to 4 hours</span>
         </div>
       </div>

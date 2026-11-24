@@ -1,13 +1,9 @@
 import React, { useState } from 'react';
 import { 
   Search, 
-  Filter, 
   ArrowUpDown, 
   ChevronRight, 
-  CheckCircle2, 
-  AlertTriangle,
-  ArrowUp,
-  ArrowDown
+  Layers
 } from 'lucide-react';
 import { SeverityBadge } from '../utils/theme';
 
@@ -19,18 +15,17 @@ export default function RegionsRiskTable({
   const [search, setSearch] = useState('');
   const [riskFilter, setRiskFilter] = useState('ALL');
   const [sortField, setSortField] = useState('risk_score');
-  const [sortAsc, setSortAsc] = useState(false); // default: highest risk score descending
+  const [sortAsc, setSortAsc] = useState(false);
 
   const handleSort = (field) => {
     if (sortField === field) {
       setSortAsc(!sortAsc);
     } else {
       setSortField(field);
-      setSortAsc(false); // Default to desc for newly clicked field
+      setSortAsc(false);
     }
   };
 
-  // Filter and sort
   const filtered = regions.filter(reg => {
     const matchesSearch = search === '' || 
       reg.name.toLowerCase().includes(search.toLowerCase()) ||
@@ -62,10 +57,6 @@ export default function RegionsRiskTable({
         aVal = Number(a.environmental_data?.river_level) || 0;
         bVal = Number(b.environmental_data?.river_level) || 0;
         break;
-      case 'last_updated':
-        aVal = a.risk_assessment?.last_updated || '';
-        bVal = b.risk_assessment?.last_updated || '';
-        return sortAsc ? aVal.localeCompare(bVal) : bVal.localeCompare(aVal);
       default:
         aVal = Number(a.risk_assessment?.risk_score) || 0;
         bVal = Number(b.risk_assessment?.risk_score) || 0;
@@ -74,37 +65,36 @@ export default function RegionsRiskTable({
   });
 
   return (
-    <div className="bg-bb-card border border-bb-border rounded-lg p-4 sm:p-5 shadow-flat flex flex-col justify-between">
+    <div className="bg-app-card rounded-panel border border-app-border p-5 shadow-card flex flex-col justify-between">
       {/* Header & Controls */}
-      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-bb-border/70 pb-3 mb-3">
+      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-app-border/70 pb-3.5 mb-4">
         <div>
-          <h3 className="text-xs font-bold uppercase tracking-wider text-white">
-            Catchment Vulnerability Matrix
+          <h3 className="text-sm font-bold text-white flex items-center space-x-2">
+            <Layers className="w-4 h-4 text-app-primary" />
+            <span>Catchment Vulnerability Matrix</span>
           </h3>
-          <p className="text-[11px] text-bb-subtle">
-            Comparative risk score ranking across {regions.length} monitored Himalayan & North-Eastern river basins
+          <p className="text-xs text-app-muted mt-0.5">
+            Comparative risk score ranking across {regions.length} monitored river basins
           </p>
         </div>
 
         {/* Search & Filter Controls */}
         <div className="flex flex-wrap items-center gap-2">
-          {/* Search Input */}
           <div className="relative">
-            <Search className="w-3.5 h-3.5 text-bb-subtle absolute left-2.5 top-1/2 -translate-y-1/2" />
+            <Search className="w-3.5 h-3.5 text-app-muted absolute left-3 top-1/2 -translate-y-1/2" />
             <input
               type="text"
-              placeholder="Search basin, state..."
+              placeholder="Filter basin or state..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="bg-[#091122] text-white text-xs border border-bb-border rounded pl-8 pr-2.5 py-1.5 focus:outline-none focus:border-bb-accent w-36 sm:w-48 placeholder-bb-subtle"
+              className="bg-app-elevated/70 text-white text-xs border border-app-border rounded-lg pl-8 pr-3 py-1.5 focus:outline-none focus:border-app-primary w-40 sm:w-48 placeholder-app-muted"
             />
           </div>
 
-          {/* Risk Level Filter Dropdown */}
           <select
             value={riskFilter}
             onChange={(e) => setRiskFilter(e.target.value)}
-            className="bg-[#091122] text-white text-xs border border-bb-border rounded px-2.5 py-1.5 focus:outline-none focus:border-bb-accent cursor-pointer font-mono"
+            className="bg-app-elevated/70 text-white text-xs border border-app-border rounded-lg px-3 py-1.5 focus:outline-none focus:border-app-primary cursor-pointer font-medium"
           >
             <option value="ALL">All Tiers ({regions.length})</option>
             <option value="CRITICAL">Critical</option>
@@ -115,65 +105,56 @@ export default function RegionsRiskTable({
         </div>
       </div>
 
-      {/* Dense Bloomberg-Style Table */}
+      {/* Modern Clean Table */}
       <div className="overflow-x-auto">
-        <table className="w-full text-left text-xs font-mono border-collapse" role="table">
+        <table className="w-full text-left text-xs border-collapse">
           <thead>
-            <tr className="border-b border-bb-border text-[11px] text-bb-muted uppercase tracking-wider bg-[#091122]/60 select-none">
+            <tr className="border-b border-app-border text-xs text-app-muted font-medium bg-app-elevated/30 select-none">
               <th 
-                className="py-2 px-3 cursor-pointer hover:text-white"
+                className="py-2.5 px-3 cursor-pointer hover:text-white"
                 onClick={() => handleSort('name')}
               >
-                <div className="flex items-center space-x-1">
-                  <span>Catchment / State</span>
-                  <ArrowUpDown className="w-3 h-3 text-bb-subtle" />
+                <div className="flex items-center space-x-1.5">
+                  <span>Basin & State</span>
+                  <ArrowUpDown className="w-3 h-3 text-app-muted" />
                 </div>
               </th>
-              <th className="py-2 px-3">Hazard Tier</th>
+              <th className="py-2.5 px-3">Hazard Status</th>
               <th 
-                className="py-2 px-3 text-right cursor-pointer hover:text-white"
+                className="py-2.5 px-3 text-right cursor-pointer hover:text-white"
                 onClick={() => handleSort('risk_score')}
               >
-                <div className="flex items-center justify-end space-x-1">
+                <div className="flex items-center justify-end space-x-1.5">
                   <span>Risk Score</span>
-                  <ArrowUpDown className="w-3 h-3 text-bb-subtle" />
+                  <ArrowUpDown className="w-3 h-3 text-app-muted" />
                 </div>
               </th>
               <th 
-                className="py-2 px-3 text-right cursor-pointer hover:text-white"
+                className="py-2.5 px-3 text-right cursor-pointer hover:text-white"
                 onClick={() => handleSort('rainfall')}
               >
-                <div className="flex items-center justify-end space-x-1">
+                <div className="flex items-center justify-end space-x-1.5">
                   <span>Rain 24h</span>
-                  <ArrowUpDown className="w-3 h-3 text-bb-subtle" />
+                  <ArrowUpDown className="w-3 h-3 text-app-muted" />
                 </div>
               </th>
               <th 
-                className="py-2 px-3 text-right cursor-pointer hover:text-white"
+                className="py-2.5 px-3 text-right cursor-pointer hover:text-white"
                 onClick={() => handleSort('river_level')}
               >
-                <div className="flex items-center justify-end space-x-1">
+                <div className="flex items-center justify-end space-x-1.5">
                   <span>River Stage</span>
-                  <ArrowUpDown className="w-3 h-3 text-bb-subtle" />
+                  <ArrowUpDown className="w-3 h-3 text-app-muted" />
                 </div>
               </th>
-              <th 
-                className="py-2 px-3 text-right cursor-pointer hover:text-white hidden sm:table-cell"
-                onClick={() => handleSort('last_updated')}
-              >
-                <div className="flex items-center justify-end space-x-1">
-                  <span>Last Sync</span>
-                  <ArrowUpDown className="w-3 h-3 text-bb-subtle" />
-                </div>
-              </th>
-              <th className="py-2 px-2 text-center w-8"></th>
+              <th className="py-2.5 px-2 text-center w-8"></th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-bb-border/50">
+          <tbody className="divide-y divide-app-border/40">
             {sorted.length === 0 ? (
               <tr>
-                <td colSpan={7} className="py-6 text-center text-bb-muted font-mono">
-                  No catchments matching "{search}" in tier "{riskFilter}".
+                <td colSpan={6} className="py-8 text-center text-app-muted">
+                  No basins matching "{search}" in tier "{riskFilter}".
                 </td>
               </tr>
             ) : (
@@ -192,46 +173,42 @@ export default function RegionsRiskTable({
                     onClick={() => onSelectRegion(reg)}
                     className={`cursor-pointer transition-colors group ${
                       isSelected 
-                        ? 'bg-bb-accent/10 border-l-2 border-l-bb-accent text-white font-semibold' 
-                        : 'hover:bg-bb-panel/60 text-slate-300'
+                        ? 'bg-app-primary/10 border-l-2 border-l-app-primary text-white font-medium' 
+                        : 'hover:bg-app-elevated/50 text-slate-300'
                     }`}
                   >
-                    <td className="py-2.5 px-3">
-                      <div className="font-sans font-semibold text-white group-hover:text-bb-accent transition-colors">
+                    <td className="py-3 px-3">
+                      <div className="font-semibold text-white group-hover:text-app-cyan transition-colors">
                         {reg.name}
                       </div>
-                      <div className="text-[10px] text-bb-subtle">
+                      <div className="text-[11px] text-app-muted">
                         {reg.state} &bull; {reg.river_basin}
                       </div>
                     </td>
 
-                    <td className="py-2.5 px-3">
+                    <td className="py-3 px-3">
                       <SeverityBadge level={riskLevel} size="xs" />
                     </td>
 
-                    <td className="py-2.5 px-3 text-right tabular-nums font-bold">
+                    <td className="py-3 px-3 text-right tabular-nums font-bold text-sm">
                       <span className={score >= 80 ? 'text-red-400' : (score >= 60 ? 'text-orange-400' : 'text-slate-200')}>
                         {score.toFixed(1)}
                       </span>
                     </td>
 
-                    <td className="py-2.5 px-3 text-right tabular-nums">
-                      <span className="text-white">{rain.toFixed(1)}</span>
-                      <span className="text-bb-subtle ml-1 text-[10px]">mm</span>
+                    <td className="py-3 px-3 text-right tabular-nums">
+                      <span className="text-white font-medium">{rain.toFixed(1)}</span>
+                      <span className="text-app-muted ml-1 text-xs">mm</span>
                     </td>
 
-                    <td className="py-2.5 px-3 text-right tabular-nums">
-                      <span className={isBreached ? 'text-red-400 font-bold' : 'text-white'}>
+                    <td className="py-3 px-3 text-right tabular-nums">
+                      <span className={isBreached ? 'text-red-400 font-bold' : 'text-white font-medium'}>
                         {river.toFixed(2)}
                       </span>
-                      <span className="text-bb-subtle ml-1 text-[10px]">m</span>
+                      <span className="text-app-muted ml-1 text-xs">m</span>
                     </td>
 
-                    <td className="py-2.5 px-3 text-right tabular-nums text-bb-subtle text-[11px] hidden sm:table-cell">
-                      {reg.risk_assessment?.last_updated ? reg.risk_assessment.last_updated.split(' ')[1] || 'Just now' : 'Synced'}
-                    </td>
-
-                    <td className="py-2.5 px-2 text-center text-bb-subtle group-hover:text-bb-accent">
+                    <td className="py-3 px-2 text-center text-app-muted group-hover:text-app-primary">
                       <ChevronRight className="w-4 h-4 ml-auto" />
                     </td>
                   </tr>

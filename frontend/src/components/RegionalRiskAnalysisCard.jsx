@@ -1,20 +1,19 @@
 import React from 'react';
 import { 
   Mountain, 
-  Compass, 
   Layers, 
-  CheckCircle2, 
   AlertTriangle,
   Cpu,
-  Info
+  Info,
+  Compass
 } from 'lucide-react';
 import { SeverityBadge, getRiskMeta } from '../utils/theme';
 
 export default function RegionalRiskAnalysisCard({ selectedRegion, mlInfo }) {
   if (!selectedRegion) {
     return (
-      <div className="h-96 bg-bb-card border border-bb-border rounded-lg p-5 flex items-center justify-center text-xs text-bb-muted font-mono">
-        Select a region to view risk factors.
+      <div className="h-96 bg-app-card rounded-panel border border-app-border p-5 flex items-center justify-center text-xs text-app-muted">
+        Select a region to view risk diagnostics.
       </div>
     );
   }
@@ -25,7 +24,7 @@ export default function RegionalRiskAnalysisCard({ selectedRegion, mlInfo }) {
   const level = risk.risk_level || 'LOW';
   const meta = getRiskMeta(level);
 
-  // Model-driven factor importances (from backend ml-info or regional factors)
+  // Model feature importances from real backend training metadata
   const importances = mlInfo?.feature_importances || {
     "runoff_potential_factor": 57.79,
     "rainfall_intensity": 15.02,
@@ -42,81 +41,82 @@ export default function RegionalRiskAnalysisCard({ selectedRegion, mlInfo }) {
   ];
 
   return (
-    <div className="bg-bb-card border border-bb-border rounded-lg p-4 sm:p-5 shadow-flat flex flex-col justify-between">
+    <div className="bg-app-card rounded-panel border border-app-border p-5 shadow-card flex flex-col justify-between">
       {/* Header */}
-      <div className="border-b border-bb-border/70 pb-3 mb-3 flex items-center justify-between">
+      <div className="border-b border-app-border/70 pb-3 mb-3.5 flex items-center justify-between">
         <div>
-          <h3 className="text-xs font-bold uppercase tracking-wider text-white flex items-center space-x-1.5">
+          <h3 className="text-sm font-bold text-white flex items-center space-x-2">
+            <Compass className="w-4 h-4 text-app-cyan" />
             <span>Regional Risk Diagnostics</span>
           </h3>
-          <p className="text-[11px] text-bb-subtle">
-            {selectedRegion.name} Basin Geomorphology & ML Attribution
+          <p className="text-xs text-app-muted mt-0.5">
+            {selectedRegion.name} Basin Geomorphology & Model Attribution
           </p>
         </div>
         <SeverityBadge level={level} size="xs" />
       </div>
 
-      {/* Geomorphology Metrics Grid */}
-      <div className="grid grid-cols-3 gap-2 bg-[#091122] p-2.5 rounded border border-bb-border/70 text-center font-mono text-xs">
+      {/* Geomorphology 3-Cell Box */}
+      <div className="grid grid-cols-3 gap-2 bg-app-elevated/50 p-3 rounded-xl border border-app-border text-center text-xs">
         <div>
-          <div className="text-[10px] text-bb-subtle uppercase">Elevation</div>
-          <div className="text-white font-bold tabular-nums">{(Number(env.elevation) || 0).toFixed(0)}m</div>
+          <div className="text-[11px] text-app-muted font-normal">Elevation</div>
+          <div className="text-white font-bold tabular-nums text-sm mt-0.5">{(Number(env.elevation) || 0).toFixed(0)}m</div>
         </div>
-        <div className="border-x border-bb-border/60">
-          <div className="text-[10px] text-bb-subtle uppercase">Slope Angle</div>
-          <div className="text-white font-bold tabular-nums">{(Number(env.slope) || 0).toFixed(1)}°</div>
+        <div className="border-x border-app-border/70">
+          <div className="text-[11px] text-app-muted font-normal">Valley Slope</div>
+          <div className="text-white font-bold tabular-nums text-sm mt-0.5">{(Number(env.slope) || 0).toFixed(1)}°</div>
         </div>
         <div>
-          <div className="text-[10px] text-bb-subtle uppercase">Drainage Area</div>
-          <div className="text-white font-bold tabular-nums">{(Number(env.catchment_area_sqkm) || 0).toLocaleString()} km²</div>
+          <div className="text-[11px] text-app-muted font-normal">Catchment Area</div>
+          <div className="text-white font-bold tabular-nums text-sm mt-0.5">{(Number(env.catchment_area_sqkm) || 0).toLocaleString()} km²</div>
         </div>
       </div>
 
-      {/* Real Explanatory Factors from Model Assessment */}
-      <div className="my-3 space-y-1.5">
-        <div className="text-[11px] font-mono uppercase tracking-wider text-bb-muted flex items-center justify-between">
-          <span>Active Hydrological Factors</span>
-          <span className="text-[10px] text-bb-subtle">{contributingFactors.length} Active Triggers</span>
+      {/* Active Hydrological Factors */}
+      <div className="my-3 space-y-2">
+        <div className="text-xs font-semibold text-slate-300 flex items-center justify-between">
+          <span>Observed Hydrological Factors</span>
+          <span className="text-[11px] text-app-muted font-normal">{contributingFactors.length} Active Drivers</span>
         </div>
 
-        <div className="space-y-1 max-h-32 overflow-y-auto pr-1">
+        <div className="space-y-1.5 max-h-32 overflow-y-auto pr-1">
           {contributingFactors.map((factor, idx) => (
             <div 
               key={idx} 
-              className="text-[11px] text-slate-300 bg-bb-panel/50 border border-bb-border/40 px-2.5 py-1.5 rounded flex items-start space-x-2"
+              className="text-xs text-slate-200 bg-app-elevated/40 border border-app-border/60 px-3 py-2 rounded-lg flex items-start space-x-2.5 transition-colors hover:bg-app-elevated/60"
             >
               <AlertTriangle className="w-3.5 h-3.5 text-amber-400 flex-shrink-0 mt-0.5" />
-              <span className="leading-snug">{factor}</span>
+              <span className="leading-relaxed">{factor}</span>
             </div>
           ))}
         </div>
       </div>
 
-      {/* ML Model Attribution Bars */}
-      <div className="pt-2.5 border-t border-bb-border/60 space-y-2">
-        <div className="flex items-center justify-between text-[11px] font-mono text-bb-muted">
-          <span className="flex items-center space-x-1">
-            <Cpu className="w-3.5 h-3.5 text-bb-accent" />
-            <span>RandomForest Feature Weights</span>
+      {/* ML Model Attribution Weights */}
+      <div className="pt-3 border-t border-app-border/60 space-y-2.5">
+        <div className="flex items-center justify-between text-xs text-app-muted">
+          <span className="flex items-center space-x-1.5 font-medium text-slate-300">
+            <Cpu className="w-3.5 h-3.5 text-app-primary" />
+            <span>Random Forest Model Feature Weights</span>
           </span>
-          <span className="text-[10px] text-emerald-400 font-bold">R² = {mlInfo?.metrics?.r2_score || '0.9424'}</span>
+          <span className="text-xs text-emerald-400 font-semibold">R² = {mlInfo?.metrics?.r2_score || '0.9424'}</span>
         </div>
 
-        <div className="space-y-1.5 text-[10px] font-mono">
+        <div className="space-y-2 text-xs">
           {[
-            { label: 'Hydraulic Runoff Factor', pct: importances.runoff_potential_factor || 57.8, color: '#00A8FF' },
-            { label: 'Rainfall Intensity (Cloudburst)', pct: importances.rainfall_intensity || 15.0, color: '#38BDF8' },
+            { label: 'Hydraulic Runoff Factor (Slope × Soil)', pct: importances.runoff_potential_factor || 57.8, color: '#3B82F6' },
+            { label: 'Rainfall Intensity (Cloudburst Surge)', pct: importances.rainfall_intensity || 15.0, color: '#22D3EE' },
             { label: 'River Stage Encroachment', pct: importances.river_level || 10.6, color: '#F97316' },
             { label: 'River Danger Ratio', pct: importances.river_danger_ratio || 9.8, color: '#EF4444' }
           ].map((bar, i) => (
-            <div key={i} className="space-y-0.5">
-              <div className="flex justify-between text-slate-300">
-                <span className="truncate">{bar.label}</span>
-                <span className="tabular-nums font-bold text-white">{bar.pct.toFixed(1)}%</span>
+            <div key={i} className="space-y-1">
+              <div className="flex justify-between text-xs">
+                <span className="text-slate-300 truncate font-normal">{bar.label}</span>
+                <span className="tabular-nums font-semibold text-white">{bar.pct.toFixed(1)}%</span>
               </div>
-              <div className="h-1 bg-[#091122] rounded-full overflow-hidden">
+              <div className="h-1.5 bg-app-elevated rounded-full overflow-hidden">
                 <div 
-                  className="h-full rounded-full" 
+                  className="h-full rounded-full transition-all duration-500" 
                   style={{ width: `${Math.min(100, bar.pct)}%`, backgroundColor: bar.color }} 
                 />
               </div>

@@ -3,39 +3,43 @@ import { AlertCircle, AlertTriangle, ShieldCheck, Info } from 'lucide-react';
 
 export const RISK_LEVELS = {
   CRITICAL: {
-    label: 'CRITICAL',
+    label: 'Critical',
+    code: 'CRITICAL',
     color: '#EF4444',
-    bg: 'rgba(239, 68, 68, 0.15)',
-    border: 'rgba(239, 68, 68, 0.4)',
-    text: '#EF4444',
-    badgeClass: 'bg-red-950/60 text-red-400 border border-red-800/80',
+    bg: 'rgba(239, 68, 68, 0.12)',
+    border: 'rgba(239, 68, 68, 0.35)',
+    text: '#F87171',
+    badgeClass: 'bg-red-500/10 text-red-400 border border-red-500/30 shadow-[0_0_12px_-3px_rgba(239,68,68,0.4)]',
     icon: AlertCircle
   },
   HIGH: {
-    label: 'HIGH',
+    label: 'High',
+    code: 'HIGH',
     color: '#F97316',
-    bg: 'rgba(249, 115, 22, 0.15)',
-    border: 'rgba(249, 115, 22, 0.4)',
-    text: '#F97316',
-    badgeClass: 'bg-orange-950/60 text-orange-400 border border-orange-800/80',
+    bg: 'rgba(249, 115, 22, 0.12)',
+    border: 'rgba(249, 115, 22, 0.35)',
+    text: '#FB923C',
+    badgeClass: 'bg-orange-500/10 text-orange-400 border border-orange-500/30',
     icon: AlertTriangle
   },
   MODERATE: {
-    label: 'MODERATE',
+    label: 'Moderate',
+    code: 'MODERATE',
     color: '#FACC15',
-    bg: 'rgba(250, 204, 21, 0.15)',
-    border: 'rgba(250, 204, 21, 0.4)',
-    text: '#FACC15',
-    badgeClass: 'bg-amber-950/60 text-amber-300 border border-amber-800/80',
+    bg: 'rgba(250, 204, 21, 0.12)',
+    border: 'rgba(250, 204, 21, 0.35)',
+    text: '#FDE047',
+    badgeClass: 'bg-amber-500/10 text-amber-300 border border-amber-500/30',
     icon: Info
   },
   LOW: {
-    label: 'LOW',
+    label: 'Low',
+    code: 'LOW',
     color: '#10B981',
-    bg: 'rgba(16, 185, 129, 0.15)',
-    border: 'rgba(16, 185, 129, 0.4)',
-    text: '#10B981',
-    badgeClass: 'bg-emerald-950/60 text-emerald-400 border border-emerald-800/80',
+    bg: 'rgba(16, 185, 129, 0.12)',
+    border: 'rgba(16, 185, 129, 0.35)',
+    text: '#34D399',
+    badgeClass: 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/30',
     icon: ShieldCheck
   }
 };
@@ -46,20 +50,19 @@ export function getRiskMeta(level = 'LOW') {
 }
 
 /**
- * Renders a standardized WCAG-compliant severity badge with icon + label + color
+ * Standardized, accessible pill badge with icon, label, and risk color
  */
 export function SeverityBadge({ level, size = 'sm', pulse = false }) {
   const meta = getRiskMeta(level);
   const Icon = meta.icon;
 
   const sizeClasses = size === 'xs' 
-    ? 'px-1.5 py-0.5 text-[10px] gap-1' 
-    : (size === 'lg' ? 'px-3 py-1 text-xs gap-1.5 font-bold' : 'px-2 py-0.5 text-[11px] gap-1.5 font-semibold');
+    ? 'px-2 py-0.5 text-[11px] gap-1 font-medium' 
+    : (size === 'lg' ? 'px-3.5 py-1 text-xs gap-1.5 font-semibold' : 'px-2.5 py-0.5 text-xs gap-1.5 font-medium');
 
   return (
     <span 
-      className={`inline-flex items-center rounded font-mono uppercase tracking-wider ${sizeClasses} ${meta.badgeClass} ${pulse && (level === 'CRITICAL' || level === 'HIGH') ? 'animate-pulse' : ''}`}
-      style={{ backgroundColor: meta.bg, borderColor: meta.border, color: meta.text }}
+      className={`inline-flex items-center rounded-full transition-all ${sizeClasses} ${meta.badgeClass} ${pulse && (level === 'CRITICAL' || level === 'HIGH') ? 'animate-pulse' : ''}`}
       role="status"
       aria-label={`Risk Level: ${meta.label}`}
     >

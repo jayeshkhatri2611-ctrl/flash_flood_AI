@@ -15,7 +15,6 @@ import {
   fetchSystemOverview, 
   fetchRegions, 
   fetchAlerts, 
-  fetchDataSources,
   fetchMlInfo
 } from './services/api';
 
@@ -35,7 +34,7 @@ export default function App() {
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [isOpenMobileMenu, setIsOpenMobileMenu] = useState(false);
 
-  // Load all telemetry
+  // Load telemetry
   const loadTelemetry = useCallback(async (isManual = false) => {
     if (isManual) setIsRefreshing(true);
     try {
@@ -58,7 +57,6 @@ export default function App() {
       // Set initial selected region
       if (regionsData && regionsData.length > 0) {
         setSelectedRegion(prev => {
-          // If query param is present, prefer it
           const queryRegionId = searchParams.get('region');
           if (queryRegionId) {
             const matched = regionsData.find(r => r.id.toLowerCase() === queryRegionId.toLowerCase());
@@ -68,7 +66,6 @@ export default function App() {
             const updated = regionsData.find(r => r.id === prev.id);
             if (updated) return updated;
           }
-          // Default to Chamoli or highest risk region
           const defaultStored = localStorage.getItem('ff_default_region');
           if (defaultStored) {
             const matchedStored = regionsData.find(r => r.id === defaultStored);
@@ -117,7 +114,7 @@ export default function App() {
   const activeAlertsCount = alerts.filter(a => a.risk_level === 'CRITICAL' || a.risk_level === 'HIGH').length;
 
   return (
-    <div className="min-h-screen bg-bb-bg text-bb-text flex flex-col font-sans selection:bg-bb-accent selection:text-white">
+    <div className="min-h-screen bg-app-bg text-app-text flex flex-col font-sans selection:bg-app-primary selection:text-white">
       {/* 1. Left Sidebar Navigation */}
       <Sidebar 
         alertCount={activeAlertsCount}
@@ -126,8 +123,8 @@ export default function App() {
       />
 
       {/* 2. Main Layout Content Area (Offset by sidebar width on desktop) */}
-      <div className="flex-1 flex flex-col lg:pl-60 transition-all duration-200">
-        {/* Compact Top Bar */}
+      <div className="flex-1 flex flex-col lg:pl-64 transition-all duration-300">
+        {/* Modern Top Navigation Bar */}
         <TopBar
           onToggleMobileMenu={() => setIsOpenMobileMenu(!isOpenMobileMenu)}
           regions={regions}
@@ -141,15 +138,15 @@ export default function App() {
           unreadAlertsCount={activeAlertsCount}
         />
 
-        {/* Full-Width Alert Banner (Rendered only when active alert exists) */}
+        {/* Full-Width Early Warning Alert Banner (Rendered when alerts active) */}
         <AlertBanner alerts={alerts} regions={regions} />
 
         {/* Viewport Content */}
-        <main className="flex-1 p-3.5 sm:p-5 lg:p-6 max-w-[1700px] w-full mx-auto">
+        <main className="flex-1 p-4 sm:p-6 lg:p-7 max-w-[1740px] w-full mx-auto">
           {loading ? (
-            <div className="flex flex-col items-center justify-center min-h-[450px] space-y-3 font-mono text-xs text-bb-muted">
-              <div className="w-8 h-8 border-2 border-bb-accent/30 border-t-bb-accent rounded-full animate-spin" />
-              <p>Establishing Secure Hydro-Telemetry Gateway...</p>
+            <div className="flex flex-col items-center justify-center min-h-[460px] space-y-4 text-xs text-app-muted">
+              <div className="w-9 h-9 border-2 border-app-primary/20 border-t-app-primary rounded-full animate-spin" />
+              <p className="font-medium text-slate-300">Connecting to Hydrological Telemetry Pipeline...</p>
             </div>
           ) : (
             <Routes>
@@ -179,16 +176,16 @@ export default function App() {
                 } 
               />
 
-              {/* Live GIS Map View */}
+              {/* Full-Screen Modern Live GIS Map View */}
               <Route 
                 path="/map" 
                 element={
-                  <div className="space-y-4">
+                  <div className="w-full">
                     <GisMap 
                       regions={regions}
                       selectedRegion={selectedRegion}
                       onSelectRegion={handleSelectRegion}
-                      height="740px"
+                      fullScreen={true}
                     />
                   </div>
                 } 
@@ -196,7 +193,7 @@ export default function App() {
               <Route path="/gis-map" element={<Navigate to="/map" replace />} />
               <Route path="/live-map" element={<Navigate to="/map" replace />} />
 
-              {/* Regions Directory View */}
+              {/* Basin Directory View */}
               <Route 
                 path="/regions" 
                 element={
@@ -208,7 +205,7 @@ export default function App() {
                 } 
               />
 
-              {/* Alerts & Warnings View */}
+              {/* Alerts & Bulletins View */}
               <Route 
                 path="/alerts" 
                 element={
@@ -222,7 +219,7 @@ export default function App() {
               <Route path="/alerts-warnings" element={<Navigate to="/alerts" replace />} />
               <Route path="/warnings" element={<Navigate to="/alerts" replace />} />
 
-              {/* Forecast View */}
+              {/* Hydrological Forecast View */}
               <Route 
                 path="/forecast" 
                 element={
@@ -232,7 +229,7 @@ export default function App() {
                 } 
               />
 
-              {/* Reports View */}
+              {/* Reports & Telemetry Audit View */}
               <Route 
                 path="/reports" 
                 element={
@@ -244,7 +241,7 @@ export default function App() {
                 } 
               />
 
-              {/* Settings View */}
+              {/* Preferences / Settings View */}
               <Route 
                 path="/settings" 
                 element={
@@ -260,18 +257,18 @@ export default function App() {
           )}
         </main>
 
-        {/* Dense Terminal Footer */}
-        <footer className="border-t border-bb-border bg-bb-sidebar px-4 py-2.5 text-[11px] font-mono text-bb-subtle flex flex-wrap items-center justify-between gap-2">
+        {/* Clean Modern Status Footer */}
+        <footer className="border-t border-app-border bg-app-sidebar/70 px-6 py-3 text-xs text-app-muted flex flex-wrap items-center justify-between gap-3">
           <div className="flex items-center space-x-2">
-            <span className="text-bb-muted font-bold">MHA FlashFlood-AI</span>
+            <span className="font-semibold text-slate-300">FlashFlood-AI Early Warning Platform</span>
             <span>&bull;</span>
-            <span>Problem Statement SIH26192 &bull; Disaster Management</span>
+            <span>Ministry of Home Affairs (MHA) &bull; SIH26192</span>
           </div>
 
-          <div className="flex items-center space-x-3 text-bb-subtle">
-            <span>Terminal: <strong className="text-slate-300">Bloomberg Command v2.0</strong></span>
+          <div className="flex items-center space-x-3 text-app-subtle">
+            <span>Ensemble Random Forest Engine: <strong className="text-emerald-400 font-medium">R² 0.942</strong></span>
             <span>&bull;</span>
-            <span>Model: <strong className="text-emerald-400">RandomForest R² 0.942</strong></span>
+            <span>Team: <strong className="text-slate-300">DeepCoders</strong></span>
           </div>
         </footer>
       </div>

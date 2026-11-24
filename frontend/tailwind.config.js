@@ -7,28 +7,33 @@ export default {
   theme: {
     extend: {
       colors: {
-        bb: {
-          bg: '#080F1F',
-          sidebar: '#0B1427',
-          card: '#111D33',
-          panel: '#17243B',
-          border: '#1E2D4A',
-          'border-subtle': 'rgba(0, 168, 255, 0.16)',
-          accent: '#00A8FF',
-          'accent-bright': '#00D4FF',
+        // Spec design system tokens
+        app: {
+          bg: '#080E1B',
+          sidebar: '#0D1729',
+          card: '#121F33',
+          elevated: '#192940',
+          border: '#1B2B45',
+          borderSubtle: 'rgba(59, 130, 246, 0.15)',
+          primary: '#3B82F6',
+          cyan: '#22D3EE',
           text: '#F8FAFC',
           muted: '#94A3B8',
           subtle: '#64748B',
         },
-        // Backwards compatibility with previous classes
-        command: {
-          darkest: '#080F1F',
-          darker: '#0B1427',
-          dark: '#111D33',
-          card: '#17243B',
-          border: '#1E2D4A',
-          accent: '#00A8FF',
-          muted: '#94A3B8'
+        // Backward-compatible bb.* tokens aligned to new palette
+        bb: {
+          bg: '#080E1B',
+          sidebar: '#0D1729',
+          card: '#121F33',
+          panel: '#192940',
+          border: '#1B2B45',
+          'border-subtle': 'rgba(59, 130, 246, 0.15)',
+          accent: '#3B82F6',
+          'accent-bright': '#22D3EE',
+          text: '#F8FAFC',
+          muted: '#94A3B8',
+          subtle: '#64748B',
         },
         risk: {
           critical: '#EF4444',
@@ -38,16 +43,21 @@ export default {
         }
       },
       fontFamily: {
-        sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+        sans: ['Inter', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
         mono: ['ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', 'monospace']
       },
       borderRadius: {
         DEFAULT: '8px',
-        card: '8px'
+        card: '10px',
+        panel: '12px',
+        pill: '9999px'
       },
       boxShadow: {
-        flat: '0 1px 3px 0 rgba(0, 0, 0, 0.3)',
-        subtle: '0 2px 8px -2px rgba(0, 168, 255, 0.08)'
+        flat: '0 1px 2px 0 rgba(0, 0, 0, 0.25)',
+        card: '0 4px 16px -2px rgba(0, 0, 0, 0.35)',
+        glow: '0 0 20px -3px rgba(59, 130, 246, 0.25)',
+        cyanGlow: '0 0 20px -3px rgba(34, 211, 238, 0.25)',
+        criticalGlow: '0 0 24px -2px rgba(239, 68, 68, 0.35)',
       }
     },
   },

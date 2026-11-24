@@ -1,35 +1,28 @@
 import React, { useState } from 'react';
 import { 
   TrendingUp, 
-  CloudRain, 
-  Waves, 
-  Droplets, 
-  AlertTriangle, 
   Info,
-  Clock,
-  Compass,
-  ArrowRight
+  Activity,
+  Layers
 } from 'lucide-react';
 import {
   ResponsiveContainer,
   ComposedChart,
   Line,
-  Bar,
   XAxis,
   YAxis,
   CartesianGrid,
   Tooltip,
-  ReferenceLine,
-  Legend
+  ReferenceLine
 } from 'recharts';
 import { SeverityBadge } from '../utils/theme';
 
 export default function ForecastView({ selectedRegion }) {
-  const [horizon, setHorizon] = useState('12h'); // '6h', '12h', '24h'
+  const [horizon, setHorizon] = useState('12h');
 
   if (!selectedRegion) {
     return (
-      <div className="h-96 bg-bb-card border border-bb-border rounded-lg p-5 flex items-center justify-center text-xs text-bb-muted font-mono">
+      <div className="h-96 bg-app-card rounded-panel border border-app-border p-5 flex items-center justify-center text-xs text-app-muted">
         Select a catchment basin to view forward hydrological projections.
       </div>
     );
@@ -40,8 +33,6 @@ export default function ForecastView({ selectedRegion }) {
   const history = selectedRegion.historical_24h || [];
   const dangerLevel = Number(env.danger_level) || 4.5;
 
-  // Build combined observed + projected trajectory data
-  // Observed points from real history, projected points flagged with isForecast: true
   const chartData = [
     ...history.map(h => ({
       hour: h.hour,
@@ -74,15 +65,15 @@ export default function ForecastView({ selectedRegion }) {
   ];
 
   return (
-    <div className="space-y-5">
+    <div className="space-y-6">
       {/* Header */}
-      <div className="bg-bb-card border border-bb-border rounded-lg p-4 sm:p-5 shadow-flat flex flex-wrap items-center justify-between gap-3">
+      <div className="bg-app-card rounded-panel border border-app-border p-5 shadow-card flex flex-wrap items-center justify-between gap-4">
         <div>
-          <h2 className="text-sm font-bold uppercase tracking-wider text-white flex items-center space-x-2">
-            <TrendingUp className="w-4 h-4 text-bb-accent" />
+          <h2 className="text-base font-bold text-white flex items-center space-x-2.5">
+            <TrendingUp className="w-5 h-5 text-app-primary" />
             <span>Hydro-Meteorological Forecast & Inundation Trajectory</span>
           </h2>
-          <p className="text-xs text-bb-muted mt-0.5">
+          <p className="text-xs text-app-muted mt-1">
             {selectedRegion.name} ({selectedRegion.state}) &bull; {selectedRegion.river_basin}
           </p>
         </div>
@@ -91,25 +82,25 @@ export default function ForecastView({ selectedRegion }) {
       </div>
 
       {/* Main Forward Trajectory Chart */}
-      <div className="bg-bb-card border border-bb-border rounded-lg p-4 sm:p-5 shadow-flat space-y-4">
-        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-bb-border/70 pb-3">
+      <div className="bg-app-card rounded-panel border border-app-border p-5 sm:p-6 shadow-card space-y-5">
+        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-app-border/70 pb-4">
           <div>
-            <h3 className="text-xs font-bold uppercase tracking-wider text-white">
+            <h3 className="text-sm font-bold text-white">
               Observed vs Projected Hydrograph Wave
             </h3>
-            <p className="text-[11px] text-bb-subtle">
-              Solid line represents verified CWC gauge stage; dashed line indicates hydraulic routing projection
+            <p className="text-xs text-app-muted mt-0.5">
+              Solid curve represents verified CWC telemetry; dashed curve represents hydraulic routing projection
             </p>
           </div>
 
-          <div className="flex items-center space-x-1 bg-[#091122] p-1 rounded border border-bb-border text-xs font-mono">
-            <span className="text-[10px] text-bb-subtle mr-1 hidden sm:inline">Outlook Horizon:</span>
+          <div className="flex items-center space-x-1 bg-app-elevated/70 p-1 rounded-full border border-app-border text-xs">
+            <span className="text-xs text-app-muted px-2 hidden sm:inline">Forecast Window:</span>
             {['6h', '12h', '24h'].map(h => (
               <button
                 key={h}
                 onClick={() => setHorizon(h)}
-                className={`px-2.5 py-1 rounded transition-colors uppercase font-bold ${
-                  horizon === h ? 'bg-bb-accent text-white' : 'text-bb-muted hover:text-white'
+                className={`px-3 py-1 rounded-full text-xs font-semibold uppercase transition-all ${
+                  horizon === h ? 'bg-app-primary text-white shadow-sm' : 'text-app-muted hover:text-white'
                 }`}
               >
                 +{h}
@@ -120,34 +111,40 @@ export default function ForecastView({ selectedRegion }) {
 
         <div className="h-80 w-full">
           <ResponsiveContainer width="100%" height="100%">
-            <ComposedChart data={chartData} margin={{ top: 10, right: 10, left: -10, bottom: 0 }}>
-              <CartesianGrid stroke="#1E2D4A" strokeDasharray="3 3" opacity={0.6} />
-              <XAxis dataKey="hour" stroke="#64748B" fontSize={11} fontFamily="monospace" />
+            <ComposedChart data={chartData} margin={{ top: 12, right: 12, left: -8, bottom: 0 }}>
+              <CartesianGrid stroke="#1B2B45" strokeDasharray="3 3" opacity={0.5} vertical={false} />
+              <XAxis dataKey="hour" stroke="#64748B" fontSize={11} tickLine={false} axisLine={{ stroke: '#1B2B45' }} />
               <YAxis 
                 stroke="#F97316" 
                 fontSize={11} 
-                fontFamily="monospace"
+                tickLine={false}
+                axisLine={false}
                 domain={[0, Math.max(dangerLevel + 1.5, 6.0)]}
-                label={{ value: 'River Stage (m)', angle: -90, position: 'insideLeft', fill: '#F97316', fontSize: 10 }}
+                label={{ value: 'River Stage (m)', angle: -90, position: 'insideLeft', fill: '#F97316', fontSize: 11, offset: 12 }}
               />
               <Tooltip 
-                contentStyle={{ backgroundColor: '#0B1427', borderColor: '#1E2D4A', borderRadius: 8, fontSize: 12, fontFamily: 'monospace' }}
+                contentStyle={{ 
+                  backgroundColor: '#121F33', 
+                  borderColor: '#1B2B45', 
+                  borderRadius: 10, 
+                  fontSize: 12, 
+                  color: '#F8FAFC' 
+                }}
               />
               
-              {/* Danger Mark Reference Line */}
               <ReferenceLine 
                 y={dangerLevel} 
                 stroke="#EF4444" 
                 strokeDasharray="4 4" 
                 strokeWidth={1.5}
-                label={{ value: `DANGER MARK ${dangerLevel}m`, fill: '#EF4444', fontSize: 10, position: 'right' }} 
+                label={{ value: `Danger Mark: ${dangerLevel}m`, fill: '#EF4444', fontSize: 11, position: 'top' }} 
               />
 
               {/* Observed River Level (Solid) */}
               <Line 
                 type="monotone" 
                 dataKey="river_level_m" 
-                name="Observed Gauge (m)" 
+                name="Observed River Stage (m)" 
                 stroke="#F97316" 
                 strokeWidth={2.5} 
                 dot={{ r: 3, fill: '#F97316' }}
@@ -158,63 +155,63 @@ export default function ForecastView({ selectedRegion }) {
                 type="monotone" 
                 dataKey="forecast_river_m" 
                 name="Projected Hydrograph (m)" 
-                stroke="#00D4FF" 
+                stroke="#22D3EE" 
                 strokeWidth={2.5} 
                 strokeDasharray="6 4"
-                dot={{ r: 4, fill: '#00D4FF', stroke: '#080F1F', strokeWidth: 1.5 }}
+                dot={{ r: 4, fill: '#22D3EE', stroke: '#080E1B', strokeWidth: 2 }}
               />
             </ComposedChart>
           </ResponsiveContainer>
         </div>
 
-        {/* Legend & Confidence Disclaimer */}
-        <div className="flex flex-wrap items-center justify-between text-xs font-mono text-bb-muted pt-3 border-t border-bb-border/50 gap-2">
+        {/* Legend */}
+        <div className="flex flex-wrap items-center justify-between text-xs text-app-muted pt-3.5 border-t border-app-border/60 gap-3">
           <div className="flex items-center space-x-4">
-            <span className="flex items-center space-x-1.5">
+            <span className="flex items-center space-x-2">
               <span className="w-3 h-0.5 bg-[#F97316]" />
-              <span className="text-slate-300">Observed Water Level (CWC Gauge)</span>
+              <span className="text-slate-200 font-medium">Observed Stage (CWC Gauge)</span>
             </span>
-            <span className="flex items-center space-x-1.5">
-              <span className="w-3 h-0.5 border-t-2 border-dashed border-[#00D4FF]" />
-              <span className="text-cyan-300">Projected Routing (Extrapolated)</span>
+            <span className="flex items-center space-x-2">
+              <span className="w-3 h-0.5 border-t-2 border-dashed border-[#22D3EE]" />
+              <span className="text-cyan-300 font-medium">Projected Recession Routing</span>
             </span>
           </div>
 
-          <div className="text-[11px] text-bb-subtle flex items-center space-x-1">
-            <Info className="w-3.5 h-3.5 text-bb-accent" />
-            <span>Confidence: Calibrated on 10,000 India hydrological records</span>
+          <div className="text-xs text-app-subtle flex items-center space-x-1.5">
+            <Info className="w-3.5 h-3.5 text-app-cyan" />
+            <span>Calibrated with 10,000 India regional records</span>
           </div>
         </div>
       </div>
 
-      {/* Labeled Gaps for Future Numerical Weather Prediction (NWP) */}
-      <div className="bg-bb-card border border-bb-border rounded-lg p-4 sm:p-5 shadow-flat space-y-3">
+      {/* Numerical Weather Prediction Pipeline Info */}
+      <div className="bg-app-card rounded-panel border border-app-border p-5 shadow-card space-y-3.5">
         <div className="flex items-center justify-between">
-          <h3 className="text-xs font-bold uppercase tracking-wider text-white">
-            Upcoming Ingestion Pipelines (NWP & Satellite Feeds)
+          <h3 className="text-sm font-bold text-white">
+            Upcoming Sensor Ingestion Pipelines (NWP & DWR Feeds)
           </h3>
-          <span className="text-[10px] font-mono text-bb-accent border border-bb-accent/40 bg-blue-950/40 px-2 py-0.5 rounded">
-            Roadmap / BACKEND_GAPS.md
+          <span className="text-[11px] font-semibold text-app-cyan border border-app-primary/30 bg-blue-500/10 px-2.5 py-0.5 rounded-full">
+            Roadmap Pipeline
           </span>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 font-mono text-xs">
-          <div className="bg-[#091122] border border-bb-border/70 p-3 rounded space-y-1">
-            <div className="font-bold text-slate-300 flex items-center justify-between">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+          <div className="bg-app-elevated/40 border border-app-border p-3.5 rounded-xl space-y-1.5">
+            <div className="font-semibold text-slate-200 flex items-center justify-between">
               <span>IMD GFS / WRF 3km QPF Grid</span>
-              <span className="text-[10px] text-amber-400">PLANNED</span>
+              <span className="text-[10px] text-amber-400 font-bold px-2 py-0.5 rounded bg-amber-400/10">PLANNED</span>
             </div>
-            <p className="text-[11px] text-bb-subtle font-sans">
+            <p className="text-xs text-app-muted leading-relaxed">
               Not available from current data source. Ingestion of 72h deterministic quantitative precipitation forecast rasters planned for multi-horizon nowcasting.
             </p>
           </div>
 
-          <div className="bg-[#091122] border border-bb-border/70 p-3 rounded space-y-1">
-            <div className="font-bold text-slate-300 flex items-center justify-between">
-              <span>CWC Ensemble Inundation Modeling</span>
-              <span className="text-[10px] text-amber-400">PLANNED</span>
+          <div className="bg-app-elevated/40 border border-app-border p-3.5 rounded-xl space-y-1.5">
+            <div className="font-semibold text-slate-200 flex items-center justify-between">
+              <span>CWC Ensemble Hydrodynamic Modeling</span>
+              <span className="text-[10px] text-amber-400 font-bold px-2 py-0.5 rounded bg-amber-400/10">PLANNED</span>
             </div>
-            <p className="text-[11px] text-bb-subtle font-sans">
+            <p className="text-xs text-app-muted leading-relaxed">
               Not available from current data source. Hydrodynamic 2D river routing and floodplain inundation depth mapping planned with HEC-RAS connector.
             </p>
           </div>

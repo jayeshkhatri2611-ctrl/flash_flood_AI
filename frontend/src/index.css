@@ -4,58 +4,71 @@
 
 @layer base {
   body {
-    background-color: #080F1F;
+    background-color: #080E1B;
     color: #F8FAFC;
     font-family: 'Inter', system-ui, -apple-system, sans-serif;
-    letter-spacing: -0.01em;
+    letter-spacing: -0.011em;
     -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
   }
 
-  /* Tabular numbers for all telemetry and data values */
+  /* Tabular numbers for clean metric alignment */
   .tabular-nums {
     font-variant-numeric: tabular-nums;
   }
 }
 
-/* Bloomberg/Grafana Dense Tactical Scrollbar */
+/* Modern clean scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #0B1427;
+  background: #080E1B;
 }
 ::-webkit-scrollbar-thumb {
-  background: #1E2D4A;
-  border-radius: 4px;
+  background: #1B2B45;
+  border-radius: 9999px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #00A8FF;
+  background: #3B82F6;
 }
 
-/* Leaflet Dark Surface Map Styling */
+/* Leaflet clean container and popups */
 .leaflet-container {
   width: 100%;
   height: 100%;
-  background-color: #080F1F !important;
-  border-radius: 8px;
+  background-color: #080E1B !important;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif !important;
 }
 
 .leaflet-popup-content-wrapper {
-  background: #111D33 !important;
+  background: #121F33 !important;
   color: #F8FAFC !important;
-  border: 1px solid #1E2D4A !important;
-  border-radius: 8px !important;
-  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.7) !important;
-  padding: 4px !important;
+  border: 1px solid #1B2B45 !important;
+  border-radius: 10px !important;
+  box-shadow: 0 12px 30px -4px rgba(0, 0, 0, 0.75) !important;
+  padding: 2px !important;
 }
 
 .leaflet-popup-tip {
-  background: #111D33 !important;
-  border: 1px solid #1E2D4A !important;
+  background: #121F33 !important;
+  border: 1px solid #1B2B45 !important;
 }
 
-/* Subtle transitions for professional feel */
-button, a {
-  transition: all 0.15s ease-in-out;
+/* Map control bar styling */
+.leaflet-bar a {
+  background-color: #121F33 !important;
+  color: #F8FAFC !important;
+  border-bottom: 1px solid #1B2B45 !important;
+}
+.leaflet-bar a:hover {
+  background-color: #192940 !important;
+  color: #22D3EE !important;
+}
+
+/* Smooth transitions */
+button, a, input, select {
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
